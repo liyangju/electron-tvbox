@@ -36,13 +36,13 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-mac
-          path: dist/*TVBOX.dmg
+          path: dist/*-universal.dmg
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-win
-          path: dist/*TVBOX*.exe
+          path: dist/*Setup*.exe
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
