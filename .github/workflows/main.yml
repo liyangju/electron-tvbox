@@ -42,7 +42,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-win
-          path: dist_electron/*Setup*.exe
+          path: dist_electron/*TVBOX*.exe
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
