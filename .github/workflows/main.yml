@@ -44,8 +44,6 @@ jobs:
 
       - name: Upload macOS artifact
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist_electron/*-universal.dmg
@@ -54,8 +52,6 @@ jobs:
 
       - name: Upload Windows artifact
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist_electron/*Setup*.exe
@@ -64,8 +60,6 @@ jobs:
 
       - name: Upload Linux artifact
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist_electron/*.AppImage
