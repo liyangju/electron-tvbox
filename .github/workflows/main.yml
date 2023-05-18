@@ -35,18 +35,18 @@ jobs:
       
       - uses: actions/upload-artifact@v3
         with:
-          name: TVBOX-mac
+          name: TVBOX-Install
           path: dist/*TVBOX*.dmg
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
-          name: TVBOX-win
+          name: TVBOX-Install
           path: dist/*TVBOX*.exe
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
-          name: TVBOX-linux
+          name: TVBOX-Install
           path: dist/*.AppImage
           if-no-files-found: ignore
