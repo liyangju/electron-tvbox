@@ -36,7 +36,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-mac
-          path: dist/*
+          path: dist/*TVBOX.dmg
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
@@ -48,5 +48,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-linux
-          path: dist/*
+          path: dist/*.AppImage
           if-no-files-found: ignore
