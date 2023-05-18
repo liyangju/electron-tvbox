@@ -35,11 +35,17 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-mac
-          path: dist/*-universal.dmg
+          path: dist_electron/*-universal.dmg
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-win
-          path: dist/*Setup*.exe
+          path: dist_electron/*Setup*.exe
+          if-no-files-found: ignore
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: TVBOX-win
+          path: dist_electron/*.AppImage
           if-no-files-found: ignore
