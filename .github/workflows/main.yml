@@ -36,17 +36,17 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-mac
-          path: dist_electron/*
+          path: dist/*
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-win
-          path: dist_electron/*TVBOX*.exe
+          path: dist/*TVBOX*.exe
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
           name: TVBOX-linux
-          path: dist_electron/*
+          path: dist/*
           if-no-files-found: ignore
