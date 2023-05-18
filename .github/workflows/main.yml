@@ -34,12 +34,12 @@ jobs:
       
       - uses: actions/upload-artifact@v3
         with:
-          name: ZYPlayer-mac
-          path: dist_electron/*-universal.dmg
+          name: TVBOX-mac
+          path: dist/*-universal.dmg
           if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ZYPlayer-win
-          path: dist_electron/*Setup*.exe
+          name: TVBOX-win
+          path: dist/*Setup*.exe
           if-no-files-found: ignore
