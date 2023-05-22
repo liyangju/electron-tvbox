@@ -4,7 +4,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   update: async (url,name, config) => {
-    const result = await ipcRenderer.invoke('update', url,name,config);
+    const result = await ipcRenderer.invoke('update', url,name);
     return result;
   },
   ua: async (url) => {
@@ -23,6 +23,24 @@ const api = {
     const result = await ipcRenderer.invoke('getToken', token);
     return result;
   },
+  getHashToWeb: async (url) => {
+    const result = await ipcRenderer.invoke('getHashToWeb', url);
+    return result;
+  },
+}
+
+const store = {
+  setItem: async (key, value) => {
+    console.log(key,value)
+    await ipcRenderer.invoke('setItem', key, value);
+  },
+  getItem: async (key) => {
+    const result = await ipcRenderer.invoke('getItem', key);
+    return result;
+  },
+  deleteItem: async (key) => {
+    await ipcRenderer.invoke('deleteItem', key);
+  }
 }
 
 const updateIpc = {
@@ -46,6 +64,7 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('store', store)
     contextBridge.exposeInMainWorld('updateIpc', updateIpc)
   } catch (error) {
     console.error(error)
@@ -53,5 +72,6 @@ if (process.contextIsolated) {
 } else {
   window.electron = electronAPI
   window.api = api
+  window.store = store
   window.updateIpc = updateIpc
 }

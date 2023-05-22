@@ -5,6 +5,8 @@ import axios from 'axios';
 import JSON5 from 'json5';
 import stripComments from 'strip-comments';
 import { pipeline } from 'stream';
+import Store from 'electron-store';
+const store = new Store();
 
 const desktopPath = require('os').homedir()+ '/Desktop'; //获取当前用户的桌面路径
 
@@ -37,49 +39,6 @@ const decryptAesBCB = async(encryptedData)=> {
   
     return decryptedData;
 }
-
-// const isBase64 = str => {
-//     try {
-//       return Buffer.from(str, 'base64').toString('base64') === str;
-//     } catch(error) {
-//       return false;
-//     }
-// };
-  
-// const ua = async(url)=>{
-//     const {
-//         data
-//     } = await axios.get(url, {
-//         headers: {
-//             "User-Agent": "okhttp/3.15",
-//             'Allow':true
-//         }
-//     });
-//     const prefixCode = Buffer.from("$#", "utf-8").toString("hex");
-//     const suffixCode = Buffer.from("#$", "utf-8").toString("hex");
-//     let result = data;
-//     if (typeof data === "object" && data !== null) {
-//         result = JSON.stringify(data)
-//         console.log('success',`object解密：${url}`);
-//     } else if (data.includes(prefixCode) && data.includes(suffixCode)) {
-//         console.log('success',`aes解密：${url}`);
-//         result = decryptAesBCB(data);
-//     } else if(data.includes("**")) {
-//       // const base64Data = data ?.split("**") ?. pop();
-//       const base64Data = data?.split('**').find(substring => isBase64(substring));
-//         if (base64Data) {
-//             const decData = Buffer.from(base64Data, 'base64').toString('utf-8');
-//             if (decData.includes(prefixCode) && decData.includes(suffixCode)) {
-//                 console.log('success',`base64+aes解密：${url}`);
-//                 result = decryptAesBCB(decData);
-//             } else {
-//                 console.log('success',`base64解密：${url}`);
-//                 result = decData;
-//             }
-//         }
-//     }
-//     return result;
-// }
 
 const ua = async(url)=>{
     try{
@@ -172,7 +131,7 @@ const downloadFile = async (url, filePath, maxRetries = 3) => {
 const downloadFiles = async(urlsList, folderPath)=> {
     try{
         const downloadPromises = urlsList.map((url) => {
-            const filePath = path.join(folderPath, path.basename(url));
+            const filePath = path.join(folderPath, decodeURIComponent(path.basename(url).split('?')[0]));
             return downloadFile(url, filePath);
         });
         // 下载配置的依赖文件
@@ -259,13 +218,34 @@ const downloadFiles = async(urlsList, folderPath)=> {
    
 }
 
+const getHash = async(content)=>{
+    if(typeof content === 'object'){
+        content = JSON.stringify(content)
+        console.log('object')
+    }
 
+    const hash = await crypto.createHash('sha256').update(content).digest('hex');
+    
+    console.log(`内容的哈希值为：${hash}`);
+
+    return hash;
+}
+
+const getHashToWeb = async(url)=>{
+    let result = await ua(url);
+    result = stripComments(result);
+    let hash = await getHash(result)
+    return hash;
+}
 
   
 const updateFiles = async(url,name,config) =>{
     let result = await ua(url);
     // 去掉注释
     result = stripComments(result);
+
+    const checkHashRes = result;
+
     // fs.writeFileSync('test.json', result);
     // return;
     const dotPath = `${path.dirname(url)}/`;
@@ -274,17 +254,11 @@ const updateFiles = async(url,name,config) =>{
     const jarMatches = result.match(jarRegex)[0];
     const jarUrl =   jarMatches.includes('./') ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
     
-    const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt))(?=\s*['";?])/g;
+    // const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt))(?=\s*['";?])/g;
+    const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
     const linkMatches = result.match(linkRegex);
     const linkUrlList = linkMatches.map(link => link.includes('./') ? link.replace(/\.\//, dotPath) : link);
     const urlsList = [...new Set([...linkUrlList].filter(url => url))];
-
-    
-    // if (!Array.isArray(urlsList) || urlsList.length === 0) {
-    //     console.log('请提供有效的 URL 列表')
-    //     return;
-    // }
-
     
     // 处理JSON文件
 
@@ -365,7 +339,7 @@ const updateFiles = async(url,name,config) =>{
                 console.log(match)
                 return match;
             }else{
-                return `./lib/${p2}`;
+                return `./lib/${decodeURIComponent(p2)}`;
             }
         });
 
@@ -391,7 +365,7 @@ const updateFiles = async(url,name,config) =>{
         try{
             const parseJSON5 = JSON5.parse(replaceLink);
 
-            const apiSet = new Set(['csp_Paper', 'csp_YiSo', 'csp_PanSou', 'csp_UpYun', 'csp_Push', 'csp_Zhaozy', 'csp_Dovx', 'csp_WoGG','csp_PanSearch']);
+            const apiSet = new Set(['csp_Paper', 'csp_YiSo', 'csp_PanSou', 'csp_UpYun', 'csp_Push', 'csp_Zhaozy', 'csp_Dovx', 'csp_WoGG','csp_PanSearch','csp_TuGou']);
             // console.log("url",url)
             parseJSON5.sites = parseJSON5.sites.map(site => {
                 return apiSet.has(site.api) ? {
@@ -430,7 +404,7 @@ const updateFiles = async(url,name,config) =>{
             // 处理错误json格式
             replaceLink = replaceLink.replace(/['"]\s*(\w+)\s*['"]\s*:\s*([\w\u4e00-\u9fa5\-]+)\s*['"]/g, `"$1":"$2"`)
             // 处理token
-            replaceLink = replaceLink.replace(/(['"]\s*api\s*['"]\s*:\s*['"]\s*(csp_Paper|csp_YiSo|csp_PanSou|csp_UpYun|csp_Push|csp_Zhaozy|csp_Dovx|csp_WoGG|csp_PanSearch|csp_Upyunso|csp_AliPS|csp_Yiso|csp_PushAgent|csp_Gitcafe)\s*['"].+['"]\s*ext\s*['"]\s*:\s*)(['"][^'"]*['"])/g, `$1"${tokExt}"`)
+            replaceLink = replaceLink.replace(/(['"]\s*api\s*['"]\s*:\s*['"]\s*(csp_Paper|csp_YiSo|csp_PanSou|csp_UpYun|csp_Push|csp_Zhaozy|csp_Dovx|csp_WoGG|csp_PanSearch|csp_TuGou|csp_Upyunso|csp_AliPS|csp_Yiso|csp_PushAgent|csp_Gitcafe)\s*['"].+['"]\s*ext\s*['"]\s*:\s*)(['"][^'"]*['"])/g, `$1"${tokExt}"`)
             stringifyJSON = replaceLink;
             console.error(`JSON5解析失败 at line ${error.lineNumber}, column ${error.columnNumber}`);
         }
@@ -444,6 +418,17 @@ const updateFiles = async(url,name,config) =>{
             fs.writeFileSync(path.join(lineFolderPath, '失败资源列表.txt'), downLinkResult.errorValues.join('\n'));
         }
         console.log('success',`更改${jsonName}.json成功`)
+
+        // 是否线路更新提醒
+        const lineTipUrl = config?.lineTip?.url;
+        console.log(lineTipUrl,url)
+        if(lineTipUrl&&lineTipUrl == url){
+            const hash =  await getHash(checkHashRes);
+            store.set('config.lineTip.hash',hash);
+            console.log("设置hash，线路更新提醒")
+        }
+
+        // 是否生成多线路
         if(config.isLines){
             // 如果文件存在则读取文件内容
             const addLine = {
@@ -502,6 +487,7 @@ const updateFiles = async(url,name,config) =>{
             fs.writeFileSync(path.join(tvboxFolderPath, '多线路配置地址.txt'), clanLPath);
             return clanLPath;
         }
+
         return clanPath;
     } catch (error) {
         console.error('下载列表文件时出错：', "error");
@@ -512,9 +498,8 @@ const updateFiles = async(url,name,config) =>{
 
 
 
-const update= async(url,name,config) => {
-    
-    config = JSON.parse(config || '{}')
+const update= async(url,name) => {
+    let config = store.get('config') || {}
     config.tvboxFolderName = 'tvbox';
     let result = await updateFiles(url,name,config);
     return result;
@@ -604,5 +589,6 @@ export default {
     update,
     getJson,
     downloadJar,
-    getToken
+    getToken,
+    getHashToWeb
 };

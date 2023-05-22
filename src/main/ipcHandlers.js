@@ -1,4 +1,6 @@
 import nodeApi from '../node/index'
+import Store from 'electron-store';
+const store = new Store();
 
 class IpcHandlers {
   static registerIpcHandlers(ipcMain) {
@@ -7,11 +9,14 @@ class IpcHandlers {
     ipcMain.handle('getJson', IpcHandlers.handleGetJson);
     ipcMain.handle('downloadJar', IpcHandlers.handleDownloadJar);
     ipcMain.handle('getToken', IpcHandlers.handleGetToken);
+    ipcMain.handle('getHashToWeb', IpcHandlers.handleGetHashToWeb);
+    ipcMain.handle('getItem', IpcHandlers.handleGetItem);
+    ipcMain.handle('setItem', IpcHandlers.handleSetItem);
+    ipcMain.handle('deleteItem', IpcHandlers.handleDeleteItem);
   }
 
-  static async handleUpdate(event, url,name,config) {
-    console.log(`Updating with URL: ${url}`);
-    let result = await nodeApi.update(url,name,config);
+  static async handleUpdate(event, url,name) {
+    let result = await nodeApi.update(url,name);
     return result;
   }
 
@@ -34,6 +39,22 @@ class IpcHandlers {
   static async handleGetToken(event, token) {
     let result = await nodeApi.getToken(token);
     return result;
+  }
+
+  static async handleGetHashToWeb(event, url) {
+    let result = await nodeApi.getHashToWeb(url);
+    return result;
+  }
+
+
+  static async handleGetItem(event, key) {
+    return store.get(key);
+  }  
+  static async handleSetItem(event, key,value) {
+     store.set(key,value);
+  }
+  static async handleDeleteItem(event, key,value) {
+     store.delete(key);
   }
 }
 

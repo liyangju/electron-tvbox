@@ -8,8 +8,10 @@ const axios = require("axios");
 const JSON5 = require("json5");
 const stripComments = require("strip-comments");
 const stream = require("stream");
+const Store = require("electron-store");
 const electronUpdater = require("electron-updater");
 const icon = path.join(__dirname, "../../resources/icon.png");
+const store$1 = new Store();
 const desktopPath = require("os").homedir() + "/Desktop";
 const decryptAesBCB = async (encryptedData) => {
   const dataArr = encryptedData.split("");
@@ -110,7 +112,7 @@ const downloadFile = async (url, filePath, maxRetries = 3) => {
 const downloadFiles = async (urlsList, folderPath) => {
   try {
     const downloadPromises = urlsList.map((url) => {
-      const filePath = path.join(folderPath, path.basename(url));
+      const filePath = path.join(folderPath, decodeURIComponent(path.basename(url).split("?")[0]));
       return downloadFile(url, filePath);
     });
     const downloadResults = await Promise.allSettled(downloadPromises);
@@ -177,14 +179,30 @@ const downloadFiles = async (urlsList, folderPath) => {
     console.log("批量处理文件出错", "error");
   }
 };
+const getHash = async (content) => {
+  if (typeof content === "object") {
+    content = JSON.stringify(content);
+    console.log("object");
+  }
+  const hash = await crypto.createHash("sha256").update(content).digest("hex");
+  console.log(`内容的哈希值为：${hash}`);
+  return hash;
+};
+const getHashToWeb = async (url) => {
+  let result = await ua(url);
+  result = stripComments(result);
+  let hash = await getHash(result);
+  return hash;
+};
 const updateFiles = async (url, name, config) => {
   let result = await ua(url);
   result = stripComments(result);
+  const checkHashRes = result;
   const dotPath = `${path.dirname(url)}/`;
   const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
   const jarMatches = result.match(jarRegex)[0];
   const jarUrl = jarMatches.includes("./") ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
-  const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt))(?=\s*['";?])/g;
+  const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
   const linkMatches = result.match(linkRegex);
   const linkUrlList = linkMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
   const urlsList = [...new Set([...linkUrlList].filter((url2) => url2))];
@@ -245,7 +263,7 @@ const updateFiles = async (url, name, config) => {
         console.log(match);
         return match;
       } else {
-        return `./lib/${p2}`;
+        return `./lib/${decodeURIComponent(p2)}`;
       }
     });
     let tokExt = `http://127.0.0.1:9978/file/${tvboxFolderName}/token.txt`;
@@ -307,6 +325,13 @@ const updateFiles = async (url, name, config) => {
       fs.writeFileSync(path.join(lineFolderPath, "失败资源列表.txt"), downLinkResult.errorValues.join("\n"));
     }
     console.log("success", `更改${jsonName}.json成功`);
+    const lineTipUrl = config?.lineTip?.url;
+    console.log(lineTipUrl, url);
+    if (lineTipUrl && lineTipUrl == url) {
+      const hash = await getHash(checkHashRes);
+      store$1.set("config.lineTip.hash", hash);
+      console.log("设置hash，线路更新提醒");
+    }
     if (config.isLines) {
       const addLine = {
         "url": clanPath,
@@ -364,8 +389,8 @@ const updateFiles = async (url, name, config) => {
     return "error";
   }
 };
-const update = async (url, name, config) => {
-  config = JSON.parse(config || "{}");
+const update = async (url, name) => {
+  let config = store$1.get("config") || {};
   config.tvboxFolderName = "tvbox";
   let result = await updateFiles(url, name, config);
   return result;
@@ -439,8 +464,10 @@ const nodeApi = {
   update,
   getJson,
   downloadJar,
-  getToken
+  getToken,
+  getHashToWeb
 };
+const store = new Store();
 class IpcHandlers {
   static registerIpcHandlers(ipcMain) {
     ipcMain.handle("update", IpcHandlers.handleUpdate);
@@ -448,10 +475,13 @@ class IpcHandlers {
     ipcMain.handle("getJson", IpcHandlers.handleGetJson);
     ipcMain.handle("downloadJar", IpcHandlers.handleDownloadJar);
     ipcMain.handle("getToken", IpcHandlers.handleGetToken);
+    ipcMain.handle("getHashToWeb", IpcHandlers.handleGetHashToWeb);
+    ipcMain.handle("getItem", IpcHandlers.handleGetItem);
+    ipcMain.handle("setItem", IpcHandlers.handleSetItem);
+    ipcMain.handle("deleteItem", IpcHandlers.handleDeleteItem);
   }
-  static async handleUpdate(event, url, name, config) {
-    console.log(`Updating with URL: ${url}`);
-    let result = await nodeApi.update(url, name, config);
+  static async handleUpdate(event, url, name) {
+    let result = await nodeApi.update(url, name);
     return result;
   }
   static async handleUA(event, url) {
@@ -470,6 +500,19 @@ class IpcHandlers {
   static async handleGetToken(event, token) {
     let result = await nodeApi.getToken(token);
     return result;
+  }
+  static async handleGetHashToWeb(event, url) {
+    let result = await nodeApi.getHashToWeb(url);
+    return result;
+  }
+  static async handleGetItem(event, key) {
+    return store.get(key);
+  }
+  static async handleSetItem(event, key, value) {
+    store.set(key, value);
+  }
+  static async handleDeleteItem(event, key, value) {
+    store.delete(key);
   }
 }
 class AutoUpdater {

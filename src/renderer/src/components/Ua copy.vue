@@ -90,7 +90,7 @@
           </li>
           <li>
             <p>线路更新提醒<span>(选择一条常用的线路，若线路更新，会收到提醒通知)</span></p>
-            <el-select v-model="config.lineTip.url" clearable placeholder="请选择" @change="lineChange($event)">
+            <el-select v-model="config.lineTip.url" clearable placeholder="请选择">
               <el-option
                 v-for="item in urls"
                 :key="item.url"
@@ -148,7 +148,7 @@ const initConfig = () => {
     token: '',
     wallpaper: '',
     isLines: false,
-    lineTip: { name:'',url: '', hash: '' }
+    lineTip: { url: '', hash: '' }
   }
 }
 
@@ -206,7 +206,7 @@ const crawl = async () => {
     try {
       resData = JSON5.parse(resData)
       resData = JSON.stringify(resData, null, 2)
-    } catch (err) {
+    } catch (err){
       console.error(`JSON5 解析失败：${err}`)
     }
     resultData.value = resData
@@ -304,10 +304,8 @@ const drawerSetting = () => {
 }
 
 const clearClick = () => {
-  // localStorage.removeItem('config')
+  localStorage.removeItem('config')
   Object.assign(config, initConfig())
-
-  window.store.deleteItem('config')
   console.log(config)
   ElMessage({
     message: '清空成功',
@@ -320,33 +318,17 @@ const confirmClick = () => {
   if (config?.lineTip.url != configCopy?.lineTip.url) {
     config.lineTip.hash = ''
   }
-  // localStorage.setItem('config', JSON.stringify(config))
-
-  window.store.setItem('config', toRaw(config))
+  localStorage.setItem('config', JSON.stringify(config))
   ElMessage({
     message: '保存成功',
     type: 'success'
   })
   drawer.value = false
 }
-
-const lineChange = (val)=>{
-   const result = urls.value.find((item)=> {
-     return item.url == val;
-   });
-   if(result){
-    config.lineTip.name = result.name
-   }else{
-    config.lineTip.name = ''
-   }
-
-}
-const getConfig = async () => {
-  // const configStr = localStorage.getItem('config')
-
-  const configStr = await window.store.getItem('config')
+const getConfig = () => {
+  const configStr = localStorage.getItem('config')
   if (configStr) {
-    Object.assign(config, configStr)
+    Object.assign(config, JSON.parse(configStr))
   }
 }
 
@@ -373,33 +355,9 @@ const tokenRefresh = async () => {
     tokening.value = false
   }
 }
-
-const lineUpdateTip = async () => {
-  const configStr = await window.store.getItem('config')
-  const url = configStr?.lineTip?.url
-  const name = configStr?.lineTip?.name
-  const hash = configStr?.lineTip?.hash
-  if (url && hash) {
-    const newHash = await window.api.getHashToWeb(url)
-    if (hash != newHash) {
-      ElNotification({
-        title: '线路更新提醒',
-        message: `${name}已更新`,
-        type: 'success'
-      })
-      console.log('线路更新提醒')
-    } else {
-      console.log('提醒线路无更新')
-      ElMessage('提醒线路无更新')
-    }
-  }else{
-    console.log("没设置线路提醒")
-  }
-}
 onMounted(() => {
   getConfig()
   getUrlsData()
-  lineUpdateTip()
 })
 </script>
 
