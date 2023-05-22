@@ -281,7 +281,7 @@ const updateFiles = async (url, name, config) => {
     let stringifyJSON = "";
     try {
       const parseJSON5 = JSON5.parse(replaceLink);
-      const apiSet = /* @__PURE__ */ new Set(["csp_Paper", "csp_YiSo", "csp_PanSou", "csp_UpYun", "csp_Push", "csp_Zhaozy", "csp_Dovx", "csp_WoGG", "csp_PanSearch"]);
+      const apiSet = /* @__PURE__ */ new Set(["csp_Paper", "csp_YiSo", "csp_PanSou", "csp_UpYun", "csp_Push", "csp_Zhaozy", "csp_Dovx", "csp_WoGG", "csp_PanSearch", "csp_TuGou"]);
       parseJSON5.sites = parseJSON5.sites.map((site) => {
         return apiSet.has(site.api) ? {
           ...site,
@@ -314,7 +314,7 @@ const updateFiles = async (url, name, config) => {
       console.log("JSON5解析成功");
     } catch (error) {
       replaceLink = replaceLink.replace(/['"]\s*(\w+)\s*['"]\s*:\s*([\w\u4e00-\u9fa5\-]+)\s*['"]/g, `"$1":"$2"`);
-      replaceLink = replaceLink.replace(/(['"]\s*api\s*['"]\s*:\s*['"]\s*(csp_Paper|csp_YiSo|csp_PanSou|csp_UpYun|csp_Push|csp_Zhaozy|csp_Dovx|csp_WoGG|csp_PanSearch|csp_Upyunso|csp_AliPS|csp_Yiso|csp_PushAgent|csp_Gitcafe)\s*['"].+['"]\s*ext\s*['"]\s*:\s*)(['"][^'"]*['"])/g, `$1"${tokExt}"`);
+      replaceLink = replaceLink.replace(/(['"]\s*api\s*['"]\s*:\s*['"]\s*(csp_Paper|csp_YiSo|csp_PanSou|csp_UpYun|csp_Push|csp_Zhaozy|csp_Dovx|csp_WoGG|csp_PanSearch|csp_TuGou|csp_Upyunso|csp_AliPS|csp_Yiso|csp_PushAgent|csp_Gitcafe)\s*['"].+['"]\s*ext\s*['"]\s*:\s*)(['"][^'"]*['"])/g, `$1"${tokExt}"`);
       stringifyJSON = replaceLink;
       console.error(`JSON5解析失败 at line ${error.lineNumber}, column ${error.columnNumber}`);
     }
@@ -433,7 +433,7 @@ const getJson = async () => {
     ).then((results) => {
       return results.flat();
     });
-    const arrFilter = arr.filter((item) => !item.url.includes("yydsys.top") && !item.url.includes("pastebin.com"));
+    const arrFilter = arr.filter((item) => !item.url.includes("yydsys.top"));
     const uniqueArr = arrFilter.reduce((acc, cur) => {
       const hasDuplicate = acc.some((item) => item.url === cur.url);
       if (!hasDuplicate) {

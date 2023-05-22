@@ -554,7 +554,7 @@ const getJson = async () => {
         });
 
         // 过滤掉yydsys.top
-        const arrFilter = arr.filter(item=>!item.url.includes('yydsys.top')&&!item.url.includes('pastebin.com'))
+        const arrFilter = arr.filter(item=>!item.url.includes('yydsys.top'))
 
         const uniqueArr = arrFilter.reduce((acc, cur) => {
             const hasDuplicate = acc.some(item => item.url === cur.url);

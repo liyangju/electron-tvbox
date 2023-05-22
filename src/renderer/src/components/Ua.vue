@@ -60,7 +60,7 @@
         <a href="https://lige.fit" target="_blank" class="back"></a>
       </el-button>
 
-      <!-- <el-button size="large" type="info" @click="qrDialogVisible = true">QQ频道</el-button> -->
+      <el-button size="large" type="info" @click="qrDialogVisible = true">QQ频道</el-button>
     </div>
 
     <el-drawer v-model="drawer" size="50%">
@@ -122,7 +122,7 @@
     </el-drawer>
 
     <el-dialog v-model="qrDialogVisible" width="300px" title="加入频道">
-      <img src="https://image-lige.pages.dev/QRCode.jpg" class="qrcode" />
+      <img src="https://www.lige.fit/images/QRCode.jpg" class="qrcode" />
     </el-dialog>
   </div>
 </template>

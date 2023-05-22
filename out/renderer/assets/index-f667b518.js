@@ -3,7 +3,7 @@ var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var require_index_001 = __commonJS({
-  "assets/index-26b58dd4.js"(exports, module) {
+  "assets/index-f667b518.js"(exports, module) {
     function makeMap(str, expectsLowerCase) {
       const map = /* @__PURE__ */ Object.create(null);
       const list = str.split(",");
@@ -20491,7 +20491,7 @@ var require_index_001 = __commonJS({
       stringify
     };
     var lib = JSON5;
-    const Ua_vue_vue_type_style_index_0_scoped_79ccae08_lang = "";
+    const Ua_vue_vue_type_style_index_0_scoped_0cbf9c63_lang = "";
     const Ua_vue_vue_type_style_index_1_lang = "";
     const _export_sfc = (sfc, props) => {
       const target = sfc.__vccOpts || sfc;
@@ -20503,7 +20503,7 @@ var require_index_001 = __commonJS({
     const elBadge = "";
     const elMessage = "";
     const elNotification = "";
-    const _withScopeId = (n) => (pushScopeId("data-v-79ccae08"), n = n(), popScopeId(), n);
+    const _withScopeId = (n) => (pushScopeId("data-v-0cbf9c63"), n = n(), popScopeId(), n);
     const _hoisted_1 = {
       class: "container",
       "element-loading-text": "下载中，莫着急..."
@@ -20545,7 +20545,7 @@ var require_index_001 = __commonJS({
     const _hoisted_17 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, "是否生成多线路", -1));
     const _hoisted_18 = { style: { "flex": "auto" } };
     const _hoisted_19 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("img", {
-      src: "https://image-lige.pages.dev/QRCode.jpg",
+      src: "https://www.lige.fit/images/QRCode.jpg",
       class: "qrcode"
     }, null, -1));
     const _sfc_main$2 = {
@@ -20905,11 +20905,21 @@ var require_index_001 = __commonJS({
                   _hoisted_10
                 ]),
                 _: 1
+              }),
+              createVNode(_component_el_button, {
+                size: "large",
+                type: "info",
+                onClick: _cache[7] || (_cache[7] = ($event) => qrDialogVisible.value = true)
+              }, {
+                default: withCtx(() => [
+                  createTextVNode("QQ频道")
+                ]),
+                _: 1
               })
             ]),
             createVNode(_component_el_drawer, {
               modelValue: drawer.value,
-              "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => drawer.value = $event),
+              "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => drawer.value = $event),
               size: "50%"
             }, {
               header: withCtx(() => [
@@ -20922,7 +20932,7 @@ var require_index_001 = __commonJS({
                     createBaseVNode("div", _hoisted_14, [
                       createVNode(_component_el_input, {
                         modelValue: unref(config).token,
-                        "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => unref(config).token = $event),
+                        "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => unref(config).token = $event),
                         placeholder: "支持token值或链接（默认：http://127.0.0.1:9978/file/tvbox/token.txt）"
                       }, null, 8, ["modelValue"]),
                       createVNode(_component_el_button, {
@@ -20941,7 +20951,7 @@ var require_index_001 = __commonJS({
                     _hoisted_15,
                     createVNode(_component_el_input, {
                       modelValue: unref(config).wallpaper,
-                      "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => unref(config).wallpaper = $event),
+                      "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => unref(config).wallpaper = $event),
                       placeholder: "支持随机壁纸接口或本地壁纸（如：clan://localhost/xxx/1.png）"
                     }, null, 8, ["modelValue"])
                   ]),
@@ -20949,10 +20959,10 @@ var require_index_001 = __commonJS({
                     _hoisted_16,
                     createVNode(_component_el_select, {
                       modelValue: unref(config).lineTip.url,
-                      "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => unref(config).lineTip.url = $event),
+                      "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => unref(config).lineTip.url = $event),
                       clearable: "",
                       placeholder: "请选择",
-                      onChange: _cache[10] || (_cache[10] = ($event) => lineChange($event))
+                      onChange: _cache[11] || (_cache[11] = ($event) => lineChange($event))
                     }, {
                       default: withCtx(() => [
                         (openBlock(true), createElementBlock(Fragment, null, renderList(urls.value, (item) => {
@@ -20970,7 +20980,7 @@ var require_index_001 = __commonJS({
                     _hoisted_17,
                     createVNode(_component_el_radio_group, {
                       modelValue: unref(config).isLines,
-                      "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => unref(config).isLines = $event)
+                      "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => unref(config).isLines = $event)
                     }, {
                       default: withCtx(() => [
                         createVNode(_component_el_radio, {
@@ -21031,7 +21041,7 @@ var require_index_001 = __commonJS({
             }, 8, ["modelValue"]),
             createVNode(_component_el_dialog, {
               modelValue: qrDialogVisible.value,
-              "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => qrDialogVisible.value = $event),
+              "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => qrDialogVisible.value = $event),
               width: "300px",
               title: "加入频道"
             }, {
@@ -21046,7 +21056,7 @@ var require_index_001 = __commonJS({
         };
       }
     };
-    const Ua = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-79ccae08"]]);
+    const Ua = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-0cbf9c63"]]);
     const elProgress = "";
     const elMessageBox = "";
     const _sfc_main$1 = {
