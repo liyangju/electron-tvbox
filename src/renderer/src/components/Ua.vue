@@ -406,7 +406,6 @@ const lineUpdateTip = async () => {
       console.log('线路更新提醒')
     } else {
       console.log('提醒线路无更新')
-      ElMessage('提醒线路无更新')
     }
   }else{
     console.log("没设置线路提醒")

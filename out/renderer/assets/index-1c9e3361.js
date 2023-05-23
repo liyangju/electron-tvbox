@@ -3,7 +3,7 @@ var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var require_index_001 = __commonJS({
-  "assets/index-31265403.js"(exports, module) {
+  "assets/index-1c9e3361.js"(exports, module) {
     function makeMap(str, expectsLowerCase) {
       const map = /* @__PURE__ */ Object.create(null);
       const list = str.split(",");
@@ -20491,7 +20491,7 @@ var require_index_001 = __commonJS({
       stringify
     };
     var lib = JSON5;
-    const Ua_vue_vue_type_style_index_0_scoped_063bc618_lang = "";
+    const Ua_vue_vue_type_style_index_0_scoped_2be939aa_lang = "";
     const Ua_vue_vue_type_style_index_1_lang = "";
     const _export_sfc = (sfc, props) => {
       const target = sfc.__vccOpts || sfc;
@@ -20503,7 +20503,7 @@ var require_index_001 = __commonJS({
     const elBadge = "";
     const elMessage = "";
     const elNotification = "";
-    const _withScopeId = (n) => (pushScopeId("data-v-063bc618"), n = n(), popScopeId(), n);
+    const _withScopeId = (n) => (pushScopeId("data-v-2be939aa"), n = n(), popScopeId(), n);
     const _hoisted_1 = {
       class: "container",
       "element-loading-text": "下载中，莫着急..."
@@ -20706,17 +20706,33 @@ var require_index_001 = __commonJS({
             type: "success"
           });
         };
-        const confirmClick = () => {
-          console.log(JSON.stringify(config));
-          if (config?.lineTip.url != configCopy?.lineTip.url) {
+        const setHash = async () => {
+          try {
+            const url = config?.lineTip?.url;
+            if (url) {
+              if (url != configCopy?.lineTip.url) {
+                const newHash = await window.api.getHashToWeb(url);
+                config.lineTip.hash = newHash;
+              }
+            } else {
+              config.lineTip.hash = "";
+            }
+          } catch (error) {
             config.lineTip.hash = "";
+            console.log(error);
+          } finally {
+            console.log("finally");
+            window.store.setItem("config", toRaw(config));
           }
+        };
+        const confirmClick = () => {
           window.store.setItem("config", toRaw(config));
           ElMessage({
             message: "保存成功",
             type: "success"
           });
           drawer.value = false;
+          setHash();
         };
         const lineChange = (val) => {
           const result = urls.value.find((item) => {
@@ -20773,7 +20789,6 @@ var require_index_001 = __commonJS({
               console.log("线路更新提醒");
             } else {
               console.log("提醒线路无更新");
-              ElMessage("提醒线路无更新");
             }
           } else {
             console.log("没设置线路提醒");
@@ -21046,7 +21061,7 @@ var require_index_001 = __commonJS({
         };
       }
     };
-    const Ua = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-063bc618"]]);
+    const Ua = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-2be939aa"]]);
     const elProgress = "";
     const elMessageBox = "";
     const _sfc_main$1 = {
