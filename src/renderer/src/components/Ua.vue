@@ -315,19 +315,35 @@ const clearClick = () => {
   })
   // drawer.value = false
 }
-const confirmClick = () => {
-  console.log(JSON.stringify(config))
-  if (config?.lineTip.url != configCopy?.lineTip.url) {
+const setHash = async()=>{
+  try{
+    const url = config?.lineTip?.url
+    if(url){
+      if (url != configCopy?.lineTip.url) {
+        const newHash =  await window.api.getHashToWeb(url)
+        config.lineTip.hash = newHash
+      }
+    }else{
+      config.lineTip.hash = ''
+    }
+  }catch(error){
     config.lineTip.hash = ''
+    console.log(error)
+  }finally{
+    console.log("finally")
+    window.store.setItem('config', toRaw(config))
   }
+}
+const confirmClick = () => {
   // localStorage.setItem('config', JSON.stringify(config))
-
   window.store.setItem('config', toRaw(config))
   ElMessage({
     message: '保存成功',
     type: 'success'
   })
   drawer.value = false
+  // 保存hash
+  setHash()
 }
 
 const lineChange = (val)=>{
