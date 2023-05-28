@@ -27,6 +27,18 @@ const api = {
     const result = await ipcRenderer.invoke('getHashToWeb', url);
     return result;
   },
+  getIps: async () => {
+    const result = await ipcRenderer.invoke('getIps');
+    return result;
+  },
+  pushToAndroid: async (tvboxIp) => {
+    const result = await ipcRenderer.invoke('pushToAndroid',tvboxIp);
+    return result;
+  },
+  actionToAndroid: async (tvboxIp,data) => {
+    const result = await ipcRenderer.invoke('actionToAndroid',tvboxIp,data);
+    return result;
+  },
 }
 
 const store = {

@@ -1,4 +1,6 @@
 import nodeApi from '../node/index'
+import netApi from '../node/net'
+import pushApi from '../node/push'
 import Store from 'electron-store';
 const store = new Store();
 
@@ -13,6 +15,10 @@ class IpcHandlers {
     ipcMain.handle('getItem', IpcHandlers.handleGetItem);
     ipcMain.handle('setItem', IpcHandlers.handleSetItem);
     ipcMain.handle('deleteItem', IpcHandlers.handleDeleteItem);
+
+    ipcMain.handle('getIps', IpcHandlers.handleGetIps);
+    ipcMain.handle('pushToAndroid', IpcHandlers.handlePushToAndroid);
+    ipcMain.handle('actionToAndroid', IpcHandlers.handleActionToAndroid);
   }
 
   static async handleUpdate(event, url,name) {
@@ -55,6 +61,20 @@ class IpcHandlers {
   }
   static async handleDeleteItem(event, key,value) {
      store.delete(key);
+  }
+
+  static async handleGetIps(event) {
+    let result = await netApi.getIps();
+    return result;
+  }
+  static async handlePushToAndroid(event,tvboxIp) {
+    let result = await pushApi.pushToAndroid(tvboxIp);
+    return result;
+  }
+
+  static async handleActionToAndroid(event,tvboxIp,data) {
+    let result = await pushApi.actionToAndroid(tvboxIp,data);
+    return result;
   }
 }
 

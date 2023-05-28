@@ -25,6 +25,18 @@ const api = {
   getHashToWeb: async (url) => {
     const result = await electron.ipcRenderer.invoke("getHashToWeb", url);
     return result;
+  },
+  getIps: async () => {
+    const result = await electron.ipcRenderer.invoke("getIps");
+    return result;
+  },
+  pushToAndroid: async (tvboxIp) => {
+    const result = await electron.ipcRenderer.invoke("pushToAndroid", tvboxIp);
+    return result;
+  },
+  actionToAndroid: async (tvboxIp, data) => {
+    const result = await electron.ipcRenderer.invoke("actionToAndroid", tvboxIp, data);
+    return result;
   }
 };
 const store = {

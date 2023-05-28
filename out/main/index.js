@@ -1,18 +1,18 @@
 "use strict";
 const electron = require("electron");
-const path = require("path");
+const path$1 = require("path");
 const utils = require("@electron-toolkit/utils");
-const fs = require("fs");
+const fs$1 = require("fs");
 const crypto = require("crypto");
-const axios = require("axios");
+const axios$1 = require("axios");
 const JSON5 = require("json5");
 const stripComments = require("strip-comments");
 const stream = require("stream");
 const Store = require("electron-store");
 const electronUpdater = require("electron-updater");
-const icon = path.join(__dirname, "../../resources/icon.png");
+const icon = path$1.join(__dirname, "../../resources/icon.png");
 const store$1 = new Store();
-const desktopPath = require("os").homedir() + "/Desktop";
+const desktopPath$1 = require("os").homedir() + "/Desktop";
 const decryptAesBCB = async (encryptedData) => {
   const dataArr = encryptedData.split("");
   const prefixCode = Buffer.from("$#", "utf-8").toString("hex");
@@ -37,7 +37,7 @@ const ua = async (url) => {
   try {
     const {
       data
-    } = await axios.get(url, {
+    } = await axios$1.get(url, {
       headers: {
         "User-Agent": "okhttp/3.15",
         "Allow": true
@@ -68,7 +68,7 @@ const downloadFile = async (url, filePath, maxRetries = 3) => {
   return new Promise((resolve, reject) => {
     const down = async () => {
       try {
-        const response = await axios({
+        const response = await axios$1({
           url,
           method: "GET",
           responseType: "stream",
@@ -77,7 +77,7 @@ const downloadFile = async (url, filePath, maxRetries = 3) => {
           },
           timeout: 3e4
         });
-        const writer = fs.createWriteStream(filePath);
+        const writer = fs$1.createWriteStream(filePath);
         stream.pipeline(response.data, writer, (error) => {
           if (error) {
             console.error(`文件下载出错：${url} , 出错原因：${error.message}`);
@@ -112,7 +112,7 @@ const downloadFile = async (url, filePath, maxRetries = 3) => {
 const downloadFiles = async (urlsList, folderPath) => {
   try {
     const downloadPromises = urlsList.map((url) => {
-      const filePath = path.join(folderPath, decodeURIComponent(path.basename(url).split("?")[0]));
+      const filePath = path$1.join(folderPath, decodeURIComponent(path$1.basename(url).split("?")[0]));
       return downloadFile(url, filePath);
     });
     const downloadResults = await Promise.allSettled(downloadPromises);
@@ -126,11 +126,11 @@ const downloadFiles = async (urlsList, folderPath) => {
     const drpyLink = urlsList.find((link) => link.includes("drpy") && link.includes("min.js") || link.includes("douban"));
     console.log(drpyLink);
     if (drpyLink) {
-      const drpyDirname = path.dirname(drpyLink);
-      const drpyBasename = path.basename(drpyLink);
+      const drpyDirname = path$1.dirname(drpyLink);
+      const drpyBasename = path$1.basename(drpyLink);
       const drpyPath = `${folderPath}/${drpyBasename}`;
-      if (fs.existsSync(drpyPath)) {
-        let drpyContent = fs.readFileSync(drpyPath, "utf-8");
+      if (fs$1.existsSync(drpyPath)) {
+        let drpyContent = fs$1.readFileSync(drpyPath, "utf-8");
         const regex = /(import[^"']*["'])([^"']*\/)?([^"']*?\.(js|jsx|ts|tsx))/g;
         const drpyFileNames = [];
         const newDrpyContent = drpyContent.replace(regex, (match, p1, p2, p3, p4) => {
@@ -142,10 +142,10 @@ const downloadFiles = async (urlsList, folderPath) => {
           }
         });
         console.log("drpyFileNames", drpyFileNames);
-        fs.writeFileSync(drpyPath, newDrpyContent);
+        fs$1.writeFileSync(drpyPath, newDrpyContent);
         const downloadPromisesDrpy = drpyFileNames.map(async (name) => {
           let url = `${drpyDirname}/${name}`;
-          const filePath = path.join(folderPath, name);
+          const filePath = path$1.join(folderPath, name);
           let resDb = await downloadFile(url, filePath);
           if (resDb.status == "error") {
             const fallbackUrls = [
@@ -198,7 +198,7 @@ const updateFiles = async (url, name, config) => {
   let result = await ua(url);
   result = stripComments(result);
   const checkHashRes = result;
-  const dotPath = `${path.dirname(url)}/`;
+  const dotPath = `${path$1.dirname(url)}/`;
   const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
   const jarMatches = result.match(jarRegex)[0];
   const jarUrl = jarMatches.includes("./") ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
@@ -207,9 +207,9 @@ const updateFiles = async (url, name, config) => {
   const linkUrlList = linkMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
   const urlsList = [...new Set([...linkUrlList].filter((url2) => url2))];
   const tvboxFolderName = config.tvboxFolderName;
-  const tvboxFolderPath = path.join(desktopPath, tvboxFolderName);
-  let jsonName = path.parse(url).name;
-  let jarName = path.basename(jarUrl);
+  const tvboxFolderPath = path$1.join(desktopPath$1, tvboxFolderName);
+  let jsonName = path$1.parse(url).name;
+  let jarName = path$1.basename(jarUrl);
   const urlToJSONName = {
     "饭太硬": { name: "fty", jarName: "fty.jar" },
     "肥猫": { name: "feimao" },
@@ -244,11 +244,11 @@ const updateFiles = async (url, name, config) => {
       }
     }
   }
-  const lineFolderPath = path.join(tvboxFolderPath, jsonName);
-  const libFolderPath = path.join(tvboxFolderPath, jsonName, "lib");
-  const jarPath = path.join(lineFolderPath, jarName);
-  if (!fs.existsSync(libFolderPath)) {
-    fs.mkdirSync(libFolderPath, {
+  const lineFolderPath = path$1.join(tvboxFolderPath, jsonName);
+  const libFolderPath = path$1.join(tvboxFolderPath, jsonName, "lib");
+  const jarPath = path$1.join(lineFolderPath, jarName);
+  if (!fs$1.existsSync(libFolderPath)) {
+    fs$1.mkdirSync(libFolderPath, {
       recursive: true
     });
   }
@@ -275,7 +275,7 @@ const updateFiles = async (url, name, config) => {
       if (token.includes("http") || token.includes("clan") || token.includes("tok")) {
         tokExt = token;
       } else {
-        fs.writeFileSync(path.join(tvboxFolderPath, "token.txt"), token);
+        fs$1.writeFileSync(path$1.join(tvboxFolderPath, "token.txt"), token);
       }
     }
     let stringifyJSON = "";
@@ -319,10 +319,10 @@ const updateFiles = async (url, name, config) => {
       console.error(`JSON5解析失败 at line ${error.lineNumber}, column ${error.columnNumber}`);
     }
     const clanPath = `clan://localhost/${tvboxFolderName}/${jsonName}/${jsonName}.json`;
-    fs.writeFileSync(path.join(lineFolderPath, `${jsonName}.json`), stringifyJSON);
-    fs.writeFileSync(path.join(lineFolderPath, "配置地址.txt"), clanPath);
+    fs$1.writeFileSync(path$1.join(lineFolderPath, `${jsonName}.json`), stringifyJSON);
+    fs$1.writeFileSync(path$1.join(lineFolderPath, "配置地址.txt"), clanPath);
     if (downLinkResult.errorValues.length > 0) {
-      fs.writeFileSync(path.join(lineFolderPath, "失败资源列表.txt"), downLinkResult.errorValues.join("\n"));
+      fs$1.writeFileSync(path$1.join(lineFolderPath, "失败资源列表.txt"), downLinkResult.errorValues.join("\n"));
     }
     console.log("success", `更改${jsonName}.json成功`);
     const lineTipUrl = config?.lineTip?.url;
@@ -337,10 +337,10 @@ const updateFiles = async (url, name, config) => {
         "url": clanPath,
         "name": name || `🚀${jsonName}`
       };
-      const LPath = path.join(tvboxFolderPath, "L.json");
-      if (fs.existsSync(LPath)) {
+      const LPath = path$1.join(tvboxFolderPath, "L.json");
+      if (fs$1.existsSync(LPath)) {
         console.log("L.json 文件存在");
-        const LReadContent = fs.readFileSync(LPath, "utf-8");
+        const LReadContent = fs$1.readFileSync(LPath, "utf-8");
         const LUrls = JSON.parse(LReadContent || "{}")?.urls || [];
         LUrls.push(addLine);
         const uniqueL = LUrls.reduce((acc, cur) => {
@@ -353,11 +353,11 @@ const updateFiles = async (url, name, config) => {
         const LContent = {
           "urls": uniqueL
         };
-        fs.writeFileSync(LPath, JSON.stringify(LContent, null, 2));
+        fs$1.writeFileSync(LPath, JSON.stringify(LContent, null, 2));
       } else {
         console.log("L.json 文件不存在");
         const urls = [addLine];
-        const files = fs.readdirSync(tvboxFolderPath, { withFileTypes: true });
+        const files = fs$1.readdirSync(tvboxFolderPath, { withFileTypes: true });
         const tvboxFolderNameFilter = files.filter((file) => file.isDirectory());
         tvboxFolderNameFilter.map((folder) => {
           let tvboxFolderLine = {
@@ -377,10 +377,10 @@ const updateFiles = async (url, name, config) => {
         const LContent = {
           "urls": uniqueL
         };
-        fs.writeFileSync(LPath, JSON.stringify(LContent, null, 2));
+        fs$1.writeFileSync(LPath, JSON.stringify(LContent, null, 2));
       }
       const clanLPath = `clan://localhost/${tvboxFolderName}/L.json`;
-      fs.writeFileSync(path.join(tvboxFolderPath, "多线路配置地址.txt"), clanLPath);
+      fs$1.writeFileSync(path$1.join(tvboxFolderPath, "多线路配置地址.txt"), clanLPath);
       return clanLPath;
     }
     return clanPath;
@@ -398,17 +398,17 @@ const update = async (url, name) => {
 const downloadJar = async (url) => {
   try {
     const result = await ua(url);
-    const dotPath = `${path.dirname(url)}/`;
+    const dotPath = `${path$1.dirname(url)}/`;
     const jarRegex = /(?<=['"]\s*spider\s*['"]\s*:\s*['"])(https?:\/\/|\.\/)([^\s'"]+\/)*([^\s'";}]+)/g;
     const jarMatches = result.match(jarRegex);
     const jarUrlList = jarMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
     const jarurl = jarUrlList[0];
-    let fileName = path.basename(jarurl);
-    const fileExt = path.extname(fileName);
+    let fileName = path$1.basename(jarurl);
+    const fileExt = path$1.extname(fileName);
     if (!fileExt) {
       fileName += ".jar";
     }
-    const jarPath = path.join(desktopPath, fileName);
+    const jarPath = path$1.join(desktopPath$1, fileName);
     return await downloadFile(jarurl, jarPath);
   } catch (error) {
     console.error("下载列表文件时出错：", "error");
@@ -417,11 +417,11 @@ const downloadJar = async (url) => {
 };
 const getJson = async () => {
   try {
-    const { data } = await axios.get("https://jihulab.com/duomv/apps/-/raw/main/fast.json");
+    const { data } = await axios$1.get("https://jihulab.com/duomv/apps/-/raw/main/fast.json");
     const storeHouse = data.storeHouse;
     const arr = await Promise.all(
       storeHouse.map(async (item) => {
-        const json = await axios.get(item.sourceUrl);
+        const json = await axios$1.get(item.sourceUrl);
         try {
           const parseJSON5 = JSON5.parse(json.data)?.urls.slice(1);
           return parseJSON5;
@@ -443,13 +443,12 @@ const getJson = async () => {
     }, []);
     return uniqueArr;
   } catch (error) {
-    console.error("error", error);
-    return null;
+    throw error.message;
   }
 };
 const getToken = async (token) => {
   try {
-    const { data } = await axios.post("https://auth.aliyundrive.com/v2/account/token", {
+    const { data } = await axios$1.post("https://auth.aliyundrive.com/v2/account/token", {
       refresh_token: token,
       grant_type: "refresh_token"
     });
@@ -467,6 +466,214 @@ const nodeApi = {
   getToken,
   getHashToWeb
 };
+const os = require("os");
+const net = require("net");
+const getLocalIpAddress = () => {
+  const interfaces = os.networkInterfaces();
+  for (const iface of Object.values(interfaces)) {
+    for (const alias of iface) {
+      if (alias.family === "IPv4" && !alias.internal) {
+        return alias.address;
+      }
+    }
+  }
+};
+const scanPort = async (ip, port) => {
+  return new Promise((resolve, reject) => {
+    const socket = new net.Socket();
+    socket.setTimeout(1e3);
+    socket.on("connect", () => {
+      socket.destroy();
+      resolve(ip);
+    });
+    socket.on("timeout", () => {
+      socket.destroy();
+      reject();
+    });
+    socket.on("error", () => {
+      socket.destroy();
+      reject();
+    });
+    socket.connect(port, ip);
+  });
+};
+const scanLocalNetwork = (port) => {
+  const localIpAddress = getLocalIpAddress();
+  const promises = [];
+  for (let i = 1; i <= 255; i++) {
+    const ip = `${localIpAddress.slice(0, localIpAddress.lastIndexOf("."))}.${i}`;
+    promises.push(scanPort(ip, port));
+  }
+  return Promise.allSettled(promises).then((results) => {
+    const ips = results.filter((result) => result.status === "fulfilled").map((result) => `http://${result.value}:${port}`);
+    return ips;
+  }).catch((error) => {
+    console.error(error);
+    return [];
+  });
+};
+const getIps = async () => {
+  try {
+    const ips = await scanLocalNetwork("9978");
+    console.log(ips);
+    if (ips.length) {
+      return {
+        status: "success",
+        message: "已找到可用设备",
+        ips
+      };
+    } else {
+      return {
+        status: "error",
+        message: "未找到可用设备,请在手机或电视打开TVBOX",
+        ips
+      };
+    }
+  } catch (error) {
+    return {
+      status: "error",
+      message: "查找设备出错，请重试",
+      ips: []
+    };
+  }
+};
+const netApi = {
+  getIps
+};
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
+const FormData = require("form-data");
+const desktopPath = path.join(require("os").homedir(), "Desktop");
+class TvBoxUploader {
+  constructor(tvboxIp) {
+    this.tvboxIp = tvboxIp;
+    this.axiosInstance = axios.create({
+      baseURL: tvboxIp,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    });
+  }
+  async newFolder(path2, name) {
+    try {
+      const { data } = await this.axiosInstance.post("/newFolder", {
+        path: path2,
+        name
+      });
+    } catch (error) {
+      console.error("newFolder", error.message);
+    }
+  }
+  async delFolder(path2) {
+    try {
+      const { data } = await this.axiosInstance.post("/delFolder", {
+        path: path2
+      });
+    } catch (error) {
+      console.error("delFolder", error.message);
+    }
+  }
+  async listFile() {
+    const { data } = await this.axiosInstance.get("/file/");
+    return data.files;
+  }
+  async upload(path2, files) {
+    let formData = new FormData();
+    formData.append("path", path2);
+    for (let i = 0; i < files.length; i++) {
+      formData.append(`files-${i}`, fs.createReadStream(files[i]));
+    }
+    try {
+      const { data } = await this.axiosInstance.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          ...formData.getHeaders()
+        }
+      });
+      console.log(path2, data);
+    } catch (error) {
+      console.error("upload", error.message);
+    }
+  }
+  async uploadFolderToTvBox(folderPath, uploadPath) {
+    if (!uploadPath.includes("/")) {
+      await this.newFolder("", uploadPath);
+    }
+    let files = fs.readdirSync(folderPath);
+    let filesArr = [];
+    for (let i = 0; i < files.length; i++) {
+      let fileName = files[i];
+      let fillPath = path.join(folderPath, fileName);
+      let file = fs.statSync(fillPath);
+      if (file.isDirectory()) {
+        await this.delFolder(`${uploadPath}/${fileName}`);
+        await this.newFolder(uploadPath, fileName);
+        await this.uploadFolderToTvBox(fillPath, `${uploadPath}/${fileName}`);
+      } else {
+        filesArr.push(fillPath);
+      }
+    }
+    if (filesArr.length > 0) {
+      await this.upload(uploadPath, filesArr);
+    }
+  }
+  async action(data) {
+    await this.axiosInstance.post("/action", data);
+  }
+  // async pushToAndroid() {
+  // }
+}
+const pushToAndroid = async (tvboxIp) => {
+  try {
+    const tvboxName = "tvbox";
+    let tvBoxUploader = await new TvBoxUploader(tvboxIp);
+    let files = await tvBoxUploader.listFile();
+    if (files.length == 0) {
+      return {
+        status: "error",
+        message: "没有存储权限，请在TVBOX软件开启"
+      };
+    }
+    try {
+      let folderPath = path.join(desktopPath, tvboxName);
+      await tvBoxUploader.uploadFolderToTvBox(folderPath, tvboxName);
+      return {
+        status: "success",
+        message: "上传成功，请查看设备根目录"
+      };
+    } catch (error) {
+      return {
+        status: "error",
+        message: `上传失败，电脑桌面没有${tvboxName}文件夹`
+      };
+    }
+  } catch (error) {
+    return {
+      status: "error",
+      message: "连接失败，请重新刷新IP"
+    };
+  }
+};
+const actionToAndroid = async (tvboxIp, data) => {
+  try {
+    let tvBoxUploader = await new TvBoxUploader(tvboxIp);
+    await tvBoxUploader.action(data);
+    return {
+      status: "success",
+      message: "推送成功"
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: "推送失败"
+    };
+  }
+};
+const pushApi = {
+  pushToAndroid,
+  actionToAndroid
+};
 const store = new Store();
 class IpcHandlers {
   static registerIpcHandlers(ipcMain) {
@@ -479,6 +686,9 @@ class IpcHandlers {
     ipcMain.handle("getItem", IpcHandlers.handleGetItem);
     ipcMain.handle("setItem", IpcHandlers.handleSetItem);
     ipcMain.handle("deleteItem", IpcHandlers.handleDeleteItem);
+    ipcMain.handle("getIps", IpcHandlers.handleGetIps);
+    ipcMain.handle("pushToAndroid", IpcHandlers.handlePushToAndroid);
+    ipcMain.handle("actionToAndroid", IpcHandlers.handleActionToAndroid);
   }
   static async handleUpdate(event, url, name) {
     let result = await nodeApi.update(url, name);
@@ -514,12 +724,24 @@ class IpcHandlers {
   static async handleDeleteItem(event, key, value) {
     store.delete(key);
   }
+  static async handleGetIps(event) {
+    let result = await netApi.getIps();
+    return result;
+  }
+  static async handlePushToAndroid(event, tvboxIp) {
+    let result = await pushApi.pushToAndroid(tvboxIp);
+    return result;
+  }
+  static async handleActionToAndroid(event, tvboxIp, data) {
+    let result = await pushApi.actionToAndroid(tvboxIp, data);
+    return result;
+  }
 }
 class AutoUpdater {
   static update(mainWindow) {
     const isDevelopment = process.env.NODE_ENV === "development";
     if (isDevelopment) {
-      electronUpdater.autoUpdater.updateConfigPath = path.join(__dirname, "../../", "dev-app-update.yml");
+      electronUpdater.autoUpdater.updateConfigPath = path$1.join(__dirname, "../../", "dev-app-update.yml");
     }
     electronUpdater.autoUpdater.autoDownload = false;
     electronUpdater.autoUpdater.on("error", function(message) {
@@ -563,7 +785,7 @@ function createWindow() {
     ...process.platform === "linux" ? { icon } : {},
     webPreferences: {
       // nodeInteration: true,
-      preload: path.join(__dirname, "../preload/index.js"),
+      preload: path$1.join(__dirname, "../preload/index.js"),
       sandbox: false
     }
   });
@@ -577,7 +799,7 @@ function createWindow() {
   if (utils.is.dev && process.env["ELECTRON_RENDERER_URL"]) {
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
   } else {
-    mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
+    mainWindow.loadFile(path$1.join(__dirname, "../renderer/index.html"));
   }
   mainWindow.setTitle(`TVBOX助手(黎歌${electron.app.getVersion()})`);
   IpcHandlers.registerIpcHandlers(electron.ipcMain);

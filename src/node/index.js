@@ -565,8 +565,7 @@ const getJson = async () => {
         }, []);
       return uniqueArr;
     } catch (error) {
-      console.error('error', error);
-      return null;
+      throw error.message;
     }
 };
 

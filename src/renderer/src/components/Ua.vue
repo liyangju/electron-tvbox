@@ -41,26 +41,29 @@
         >下载Jar</el-button
       >
 
-      <el-popover :width="220">
+      <el-popover :width="208">
         <template #reference>
           <el-button size="large" type="danger" @click="downLocal()" :disabled="downing"
             >下载本地包</el-button
           >
         </template>
         <template #default>
-          <div style="display: flex; gap: 16px; flex-direction: column">
-            <h3 style="font-weight: 600">本地包配置</h3>
-            <p style="font-size: 12px">本地包实时下载在线线路，可自定义一些配置项</p>
-            <p><el-button @click="drawerSetting()">去配置</el-button></p>
+          <div class="popover-div">
+            <h3>本地包配置</h3>
+            <p class="mx-info">实时下载在线线路，可自定义配置</p>
+            <p class="popover-flex">
+              <el-button @click="drawerSetting()">去配置</el-button>
+              <el-button @click="qrDialogVisible = true">QQ频道</el-button>
+            </p>
           </div>
         </template>
       </el-popover>
+
+      <el-button size="large" color="#00B89F" @click="pushDialog()">推送本地包</el-button>
       <el-button size="large" type="warning"
         >前往主页
         <a href="https://lige.fit" target="_blank" class="back"></a>
       </el-button>
-
-      <!-- <el-button size="large" type="info" @click="qrDialogVisible = true">QQ频道</el-button> -->
     </div>
 
     <el-drawer v-model="drawer" size="50%">
@@ -90,7 +93,12 @@
           </li>
           <li>
             <p>线路更新提醒<span>(选择一条常用的线路，若线路更新，会收到提醒通知)</span></p>
-            <el-select v-model="config.lineTip.url" clearable placeholder="请选择" @change="lineChange($event)">
+            <el-select
+              v-model="config.lineTip.url"
+              clearable
+              placeholder="请选择"
+              @change="lineChange($event)"
+            >
               <el-option
                 v-for="item in urls"
                 :key="item.url"
@@ -124,11 +132,70 @@
     <el-dialog v-model="qrDialogVisible" width="300px" title="加入频道">
       <img src="https://www.lige.fit/images/QRCode.jpg" class="qrcode" />
     </el-dialog>
+
+    <el-dialog
+      v-model="pushdialogVisible"
+      title="推送本地包"
+      width="448px"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <el-form class="push-form" v-loading="pushing" element-loading-text="上传中">
+        <el-form-item label="设备IP">
+          <el-select v-model="tvboxIp" placeholder="请选择">
+            <el-option v-for="ip in ips" :key="ip" :label="ip" :value="ip" />
+          </el-select>
+          <el-button class="push-button" :icon="Refresh" circle @click="pushDialog()" />
+          <el-button class="push-button" :icon="Position" circle @click="pushLinedialog()" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="pushdialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="pushLocal()" :disabled="pushing">上传</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      v-model="pushLinedialogVisible"
+      title="推送仓库/线路"
+      width="448px"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
+      <el-form class="push-form">
+        <el-form-item>
+          <el-input v-model="pushLine.pushStore_name" placeholder="仓库/线路名称(选填)" />
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="pushLine.pushStore_url" placeholder="输入仓库/线路地址" />
+        </el-form-item>
+        <el-form-item>
+          <el-text class="mx-info" type="info"
+            >需要打开TVBOX配置地址的页面再推送，如推送失败，<a :href="tvboxIp" target="_blank"
+              >请点击此处推送</a
+            ></el-text
+          >
+        </el-form-item>
+      </el-form>
+
+      <!-- <span style="font-size:12px">推送到TVBOX设备根目录，推送前请保持TVBOX相关软件处于开启状态</span> -->
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="pushLinedialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="pushStore()">推送</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <img src="https://www.lige.fit/images/QRCode.jpg" class="preload" />
   </div>
 </template>
 
 <script setup>
 import { ref, toRaw, reactive, onMounted } from 'vue'
+import { Refresh, Position } from '@element-plus/icons-vue'
 import JSON5 from 'json5'
 
 const urls = ref(JSON.parse(localStorage.getItem('urls')) || [])
@@ -140,6 +207,18 @@ const downing = ref(false)
 const tokening = ref(false)
 const drawer = ref(false)
 const qrDialogVisible = ref(false)
+const pushdialogVisible = ref(false)
+const pushLinedialogVisible = ref(false)
+
+const pushing = ref(false)
+const tvboxIp = ref('')
+const ips = ref([])
+
+let pushLine = reactive({
+  pushStore_name: '',
+  pushStore_url: '',
+  do: 'pushStore'
+})
 
 let configCopy = reactive({})
 
@@ -148,7 +227,7 @@ const initConfig = () => {
     token: '',
     wallpaper: '',
     isLines: false,
-    lineTip: { name:'',url: '', hash: '' }
+    lineTip: { name: '', url: '', hash: '' }
   }
 }
 
@@ -169,25 +248,22 @@ const createFilter = (queryString) => {
 const handleSelect = async (item) => {
   selectedUrl.value = item.url
   selectedName.value = item.name
+  resultData.value = ''
 }
 
 const handleInput = () => {
   selectedName.value = ''
 }
 
-const isObject = (value) => {
-  return Object.prototype.toString.call(value) === '[object Object]'
-}
-
 const getUrlsData = async () => {
   try {
     const data = await window.api.getJson()
-    if (data) {
+    if (data && data.length >= 10) {
       urls.value = data
       localStorage.setItem('urls', JSON.stringify(data))
     }
   } catch (error) {
-    console.error(error)
+    console.error(error.message)
   }
 }
 
@@ -200,9 +276,6 @@ const crawl = async () => {
   crawling.value = true
   try {
     let resData = await window.api.ua(url)
-    // if (isObject(resData)) {
-    //   resData = JSON.stringify(resData,null,2)
-    // }
     try {
       resData = JSON5.parse(resData)
       resData = JSON.stringify(resData, null, 2)
@@ -315,22 +388,22 @@ const clearClick = () => {
   })
   // drawer.value = false
 }
-const setHash = async()=>{
-  try{
+const setHash = async () => {
+  try {
     const url = config?.lineTip?.url
-    if(url){
+    if (url) {
       if (url != configCopy?.lineTip.url) {
-        const newHash =  await window.api.getHashToWeb(url)
+        const newHash = await window.api.getHashToWeb(url)
         config.lineTip.hash = newHash
       }
-    }else{
+    } else {
       config.lineTip.hash = ''
     }
-  }catch(error){
+  } catch (error) {
     config.lineTip.hash = ''
     console.log(error)
-  }finally{
-    console.log("finally")
+  } finally {
+    console.log('finally')
     window.store.setItem('config', toRaw(config))
   }
 }
@@ -346,16 +419,15 @@ const confirmClick = () => {
   setHash()
 }
 
-const lineChange = (val)=>{
-   const result = urls.value.find((item)=> {
-     return item.url == val;
-   });
-   if(result){
+const lineChange = (val) => {
+  const result = urls.value.find((item) => {
+    return item.url == val
+  })
+  if (result) {
     config.lineTip.name = result.name
-   }else{
+  } else {
     config.lineTip.name = ''
-   }
-
+  }
 }
 const getConfig = async () => {
   // const configStr = localStorage.getItem('config')
@@ -407,10 +479,88 @@ const lineUpdateTip = async () => {
     } else {
       console.log('提醒线路无更新')
     }
-  }else{
-    console.log("没设置线路提醒")
+  } else {
+    console.log('没设置线路提醒')
   }
 }
+
+const pushDialog = async () => {
+  try {
+    const result = await window.api.getIps()
+    if (result.status == 'success') {
+      ips.value = result.ips
+      tvboxIp.value = result.ips[0]
+      pushdialogVisible.value = true
+    } else {
+      ips.value = []
+      tvboxIp.value = ''
+      ElMessage.error(result.message)
+    }
+    console.log(result)
+  } catch (error) {}
+}
+
+const pushLocal = async () => {
+  if (!tvboxIp.value) {
+    ElMessage('请在手机或电视打开TVBOX')
+    return
+  }
+  pushing.value = true
+  try {
+    const result = await window.api.pushToAndroid(tvboxIp.value)
+    if (result.status == 'success') {
+      ElMessage({
+        message: result.message,
+        type: 'success'
+      })
+      pushdialogVisible.value = false
+    } else {
+      ElMessage.error(result.message)
+    }
+    console.log(result)
+  } catch (error) {
+    ElMessage.error('上传失败')
+  } finally {
+    console.log('finally')
+    pushing.value = false
+  }
+}
+
+const pushLinedialog = () => {
+  pushLinedialogVisible.value = true
+  pushLine.pushStore_name = ''
+  pushLine.pushStore_url = ''
+}
+const pushStore = async () => {
+  const urlRegex = /^(clan|http).*$/
+  if (!urlRegex.test(pushLine.pushStore_url)) {
+    ElMessage('请输入正确的仓库/线路地址再推送')
+    return
+  }
+  if (!tvboxIp.value) {
+    ElMessage('请在手机或电视打开TVBOX')
+    return
+  }
+
+  try {
+    console.log((tvboxIp.value, toRaw(pushLine)))
+    const result = await window.api.actionToAndroid(tvboxIp.value, toRaw(pushLine))
+    window.api.actionToAndroid(tvboxIp.value, { url: pushLine.pushStore_url, do: 'api' })
+    if (result.status == 'success') {
+      ElMessage({
+        message: result.message,
+        type: 'success'
+      })
+      pushLinedialogVisible.value = false
+    } else {
+      ElMessage.error(result.message)
+    }
+    console.log(result)
+  } catch (error) {
+    ElMessage.error('推送失败')
+  }
+}
+
 onMounted(() => {
   getConfig()
   getUrlsData()
@@ -467,6 +617,18 @@ onMounted(() => {
   }
 }
 
+.popover-div {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  h3 {
+    text-align: center;
+  }
+  .popover-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+}
 .drawer-list {
   li {
     margin-bottom: 16px;
@@ -488,10 +650,28 @@ onMounted(() => {
         margin-left: 12px;
       }
     }
-    .mx-info {
-      font-size: 12px;
-    }
   }
+}
+
+.mx-info {
+  font-size: 12px;
+}
+.push-form {
+  :deep(.el-select) {
+    width: 258px;
+  }
+  .push-button {
+    margin-left: 16px;
+  }
+}
+
+img.preload {
+  display: none;
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
 }
 
 :deep(.el-input-group__append),
