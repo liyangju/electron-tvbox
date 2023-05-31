@@ -6,9 +6,10 @@ const fs$1 = require("fs");
 const crypto = require("crypto");
 const axios$1 = require("axios");
 const JSON5 = require("json5");
+const Store = require("electron-store");
 const stripComments = require("strip-comments");
 const stream = require("stream");
-const Store = require("electron-store");
+const pinyinPro = require("pinyin-pro");
 const electronUpdater = require("electron-updater");
 const icon = path$1.join(__dirname, "../../resources/icon.png");
 const store$1 = new Store();
@@ -194,65 +195,71 @@ const getHashToWeb = async (url) => {
   let hash = await getHash(result);
   return hash;
 };
+const removeEmojiAndText = (text) => {
+  const emojiRegex = /[^\w\u4e00-\u9fa5-]|家庭版|线路|专线/g;
+  return text.replace(emojiRegex, "");
+};
 const updateFiles = async (url, name, config) => {
-  let result = await ua(url);
-  result = stripComments(result);
-  const checkHashRes = result;
-  const dotPath = `${path$1.dirname(url)}/`;
-  const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
-  const jarMatches = result.match(jarRegex)[0];
-  const jarUrl = jarMatches.includes("./") ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
-  const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
-  const linkMatches = result.match(linkRegex);
-  const linkUrlList = linkMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
-  const urlsList = [...new Set([...linkUrlList].filter((url2) => url2))];
-  const tvboxFolderName = config.tvboxFolderName;
-  const tvboxFolderPath = path$1.join(desktopPath$1, tvboxFolderName);
-  let jsonName = path$1.parse(url).name;
-  let jarName = path$1.basename(jarUrl);
-  const urlToJSONName = {
-    "饭太硬": { name: "fty", jarName: "fty.jar" },
-    "肥猫": { name: "feimao" },
-    "FongMi": { name: "fongmi" },
-    "pastebin": { name: "daozhang" },
-    "cainisi": { name: "cainisi" },
-    "101.34.67.237": { name: "xiaoya" },
-    "jundie": { name: "junyu" },
-    "dxawi": { name: "dxawi" },
-    "liucn": { name: "liucn" },
-    "ygbh": { name: "ygbh" },
-    "xc": { name: "xingchen" },
-    "download/2863": { name: "xiaosa" },
-    "云星日记": { name: "yunxingriji" },
-    "源享家": { name: "yuanxiangjia" },
-    "download/2883": { name: "mayiluntan" },
-    "66666/mao": { name: "fenxiangzhe" },
-    "binghe": { name: "binghe" },
-    "chengxueli": { name: "baixinyuan" },
-    "kebedd69": { name: "tianmi" },
-    "xianyuyimu": { name: "yimu" },
-    "kvymin": { name: "kvymin" },
-    "a/b/c": { name: "abc" },
-    "gaotianliuyun": { name: "gaotianliuyun" },
-    "Yosakoii": { name: "Yosakoii" }
-  };
-  for (const [key, value] of Object.entries(urlToJSONName)) {
-    if (url.includes(key)) {
-      jsonName = value.name;
-      if (value.jarName) {
-        jarName = value.jarName;
+  try {
+    let result = await ua(url);
+    result = stripComments(result);
+    const checkHashRes = result;
+    const dotPath = `${path$1.dirname(url)}/`;
+    const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*(img\+)?)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
+    const jarMatches = result.match(jarRegex)[0];
+    const jarUrl = jarMatches.includes("./") ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
+    const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
+    const linkMatches = result.match(linkRegex);
+    const linkUrlList = linkMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
+    const urlsList = [...new Set([...linkUrlList].filter((url2) => url2))];
+    const tvboxFolderName = config.tvboxFolderName;
+    const tvboxFolderPath = path$1.join(desktopPath$1, tvboxFolderName);
+    let jsonName = name ? pinyinPro.pinyin(removeEmojiAndText(name), { toneType: "none", type: "array" }).join("") : path$1.parse(url).name;
+    let jarName = path$1.basename(jarUrl);
+    const urlToJSONName = {
+      "饭太硬": { name: "fty", jarName: "fty.jar" }
+      // '肥猫': { name: 'feimao' },
+      // 'FongMi': { name: 'fongmi' },
+      // 'pastebin': { name: 'daozhang' },
+      // 'cainisi': { name: 'cainisi' },
+      // '101.34.67.237': { name: 'xiaoya' },
+      // 'jundie': { name: 'junyu' },
+      // 'dxawi': { name: 'dxawi' },
+      // 'liucn': { name: 'liucn' },
+      // 'ygbh': { name: 'ygbh' },
+      // 'xc': { name: 'xingchen' },
+      // 'download/2863': { name: 'xiaosa' },
+      // '云星日记': { name: 'yunxingriji' },
+      // '源享家': { name: 'yuanxiangjia' },
+      // 'download/2883': { name: 'mayiluntan' },
+      // '66666/mao': { name: 'fenxiangzhe' },
+      // 'binghe': { name: 'binghe' },
+      // 'chengxueli': { name: 'baixinyuan' },
+      // 'kebedd69': { name: 'tianmi' },
+      // 'xianyuyimu': { name: 'yimu' },
+      // 'kvymin': { name: 'kvymin' },
+      // 'a/b/c': { name: 'abc' },
+      // 'gaotianliuyun': { name: 'gaotianliuyun' },
+      // 'Yosakoii': { name: 'Yosakoii' },
+      // 'nxog': { name: 'nxog' },
+      // 'xiaohutx': { name: 'xiaohutx' }
+    };
+    for (const [key, value] of Object.entries(urlToJSONName)) {
+      if (url.includes(key)) {
+        jsonName = value.name;
+        if (value.jarName) {
+          jarName = value.jarName;
+        }
       }
     }
-  }
-  const lineFolderPath = path$1.join(tvboxFolderPath, jsonName);
-  const libFolderPath = path$1.join(tvboxFolderPath, jsonName, "lib");
-  const jarPath = path$1.join(lineFolderPath, jarName);
-  if (!fs$1.existsSync(libFolderPath)) {
-    fs$1.mkdirSync(libFolderPath, {
-      recursive: true
-    });
-  }
-  try {
+    const lineFolderPath = path$1.join(tvboxFolderPath, jsonName);
+    const libFolderPath = path$1.join(tvboxFolderPath, jsonName, "lib");
+    const jarPath = path$1.join(lineFolderPath, jarName);
+    if (!fs$1.existsSync(libFolderPath)) {
+      fs$1.mkdirSync(libFolderPath, {
+        recursive: true
+      });
+    }
     const downJarResult = await downloadFile(jarUrl, jarPath, 2);
     const downLinkResult = await downloadFiles(urlsList, libFolderPath);
     console.log("失败资源数组", downLinkResult.errorValues);
@@ -399,7 +406,7 @@ const downloadJar = async (url) => {
   try {
     const result = await ua(url);
     const dotPath = `${path$1.dirname(url)}/`;
-    const jarRegex = /(?<=['"]\s*spider\s*['"]\s*:\s*['"])(https?:\/\/|\.\/)([^\s'"]+\/)*([^\s'";}]+)/g;
+    const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*(img\+)?)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
     const jarMatches = result.match(jarRegex);
     const jarUrlList = jarMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
     const jarurl = jarUrlList[0];

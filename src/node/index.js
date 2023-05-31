@@ -3,9 +3,10 @@ import crypto from 'crypto';
 import path from 'path';
 import axios from 'axios';
 import JSON5 from 'json5';
+import Store from 'electron-store';
 import stripComments from 'strip-comments';
 import { pipeline } from 'stream';
-import Store from 'electron-store';
+import { pinyin } from 'pinyin-pro';
 const store = new Store();
 
 const desktopPath = require('os').homedir()+ '/Desktop'; //获取当前用户的桌面路径
@@ -238,91 +239,98 @@ const getHashToWeb = async(url)=>{
     return hash;
 }
 
-  
+const removeEmojiAndText = (text)=> {
+    const emojiRegex = /[^\w\u4e00-\u9fa5-]|家庭版|线路|专线/g;
+    return text.replace(emojiRegex, '');
+}
 const updateFiles = async(url,name,config) =>{
-    let result = await ua(url);
-    // 去掉注释
-    result = stripComments(result);
-
-    const checkHashRes = result;
-
-    // fs.writeFileSync('test.json', result);
-    // return;
-    const dotPath = `${path.dirname(url)}/`;
-
-    const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
-    const jarMatches = result.match(jarRegex)[0];
-    const jarUrl =   jarMatches.includes('./') ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
     
-    // const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt))(?=\s*['";?])/g;
-    const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
-    const linkMatches = result.match(linkRegex);
-    const linkUrlList = linkMatches.map(link => link.includes('./') ? link.replace(/\.\//, dotPath) : link);
-    const urlsList = [...new Set([...linkUrlList].filter(url => url))];
-    
-    // 处理JSON文件
+    try {
+        let result = await ua(url);
+        // 去掉注释
+        result = stripComments(result);
 
-    // 所有文件放的文件夹，默认为tvbox文件夹
-    const tvboxFolderName = config.tvboxFolderName;
-    const tvboxFolderPath = path.join(desktopPath, tvboxFolderName);
-    // 得到线路名称，以链接最后一层命名
-    let jsonName = path.parse(url).name;
-    // 得到jar文件的具体路径
-    let jarName = path.basename(jarUrl);
-    // 处理文件夹名称或者单独配置项开始
-    const urlToJSONName = {
-        '饭太硬': { name: 'fty',jarName:'fty.jar' },
-        '肥猫': { name: 'feimao' },
-        'FongMi': { name: 'fongmi' },
-        'pastebin': { name: 'daozhang' },
-        'cainisi': { name: 'cainisi' },
-        '101.34.67.237': { name: 'xiaoya' },
-        'jundie': { name: 'junyu' },
-        'dxawi': { name: 'dxawi' },
-        'liucn': { name: 'liucn' },
-        'ygbh': { name: 'ygbh' },
-        'xc': { name: 'xingchen' },
-        'download/2863': { name: 'xiaosa' },
-        '云星日记': { name: 'yunxingriji' },
-        '源享家': { name: 'yuanxiangjia' },
-        'download/2883': { name: 'mayiluntan' },
-        '66666/mao': { name: 'fenxiangzhe' },
-        'binghe': { name: 'binghe' },
-        'chengxueli': { name: 'baixinyuan' },
-        'kebedd69': { name: 'tianmi' },
-        'xianyuyimu': { name: 'yimu' },
-        'kvymin': { name: 'kvymin' },
-        'a/b/c': { name: 'abc' },
-        'gaotianliuyun': { name: 'gaotianliuyun' },
-        'Yosakoii': { name: 'Yosakoii' }
-    };
-    
-    for (const [key, value] of Object.entries(urlToJSONName)) {
-        if (url.includes(key)) {
-            jsonName = value.name;
-            if(value.jarName){
-                jarName = value.jarName;
+        const checkHashRes = result;
+
+        // fs.writeFileSync('test.json', result);
+        // return;
+        const dotPath = `${path.dirname(url)}/`;
+
+        // const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
+        const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*(img\+)?)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
+        const jarMatches = result.match(jarRegex)[0];
+        const jarUrl =   jarMatches.includes('./') ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
+        
+        // const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt))(?=\s*['";?])/g;
+        const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
+        const linkMatches = result.match(linkRegex);
+        const linkUrlList = linkMatches.map(link => link.includes('./') ? link.replace(/\.\//, dotPath) : link);
+        const urlsList = [...new Set([...linkUrlList].filter(url => url))];
+        
+        // 处理JSON文件
+
+        // 所有文件放的文件夹，默认为tvbox文件夹
+        const tvboxFolderName = config.tvboxFolderName;
+        const tvboxFolderPath = path.join(desktopPath, tvboxFolderName);
+        // 得到线路名称，以链接最后一层命名
+        let jsonName = name ? pinyin(removeEmojiAndText(name), { toneType: 'none', type: 'array' }).join('') : path.parse(url).name;
+        // 得到jar文件的具体路径
+        let jarName = path.basename(jarUrl);
+        // 处理文件夹名称或者单独配置项开始
+        const urlToJSONName = {
+            '饭太硬': { name: 'fty',jarName:'fty.jar' },
+            // '肥猫': { name: 'feimao' },
+            // 'FongMi': { name: 'fongmi' },
+            // 'pastebin': { name: 'daozhang' },
+            // 'cainisi': { name: 'cainisi' },
+            // '101.34.67.237': { name: 'xiaoya' },
+            // 'jundie': { name: 'junyu' },
+            // 'dxawi': { name: 'dxawi' },
+            // 'liucn': { name: 'liucn' },
+            // 'ygbh': { name: 'ygbh' },
+            // 'xc': { name: 'xingchen' },
+            // 'download/2863': { name: 'xiaosa' },
+            // '云星日记': { name: 'yunxingriji' },
+            // '源享家': { name: 'yuanxiangjia' },
+            // 'download/2883': { name: 'mayiluntan' },
+            // '66666/mao': { name: 'fenxiangzhe' },
+            // 'binghe': { name: 'binghe' },
+            // 'chengxueli': { name: 'baixinyuan' },
+            // 'kebedd69': { name: 'tianmi' },
+            // 'xianyuyimu': { name: 'yimu' },
+            // 'kvymin': { name: 'kvymin' },
+            // 'a/b/c': { name: 'abc' },
+            // 'gaotianliuyun': { name: 'gaotianliuyun' },
+            // 'Yosakoii': { name: 'Yosakoii' },
+            // 'nxog': { name: 'nxog' },
+            // 'xiaohutx': { name: 'xiaohutx' }
+        };
+        
+        for (const [key, value] of Object.entries(urlToJSONName)) {
+            if (url.includes(key)) {
+                jsonName = value.name;
+                if(value.jarName){
+                    jarName = value.jarName;
+                }
             }
         }
-    }
 
-    // 线路文件夹路径
-    const lineFolderPath = path.join(tvboxFolderPath, jsonName);
+        // 线路文件夹路径
+        const lineFolderPath = path.join(tvboxFolderPath, jsonName);
 
-    // 线路里面lib文件夹的路径
-    const libFolderPath = path.join(tvboxFolderPath, jsonName, 'lib');
+        // 线路里面lib文件夹的路径
+        const libFolderPath = path.join(tvboxFolderPath, jsonName, 'lib');
 
-    const jarPath = path.join(lineFolderPath,jarName);
+        const jarPath = path.join(lineFolderPath,jarName);
 
-    if (!fs.existsSync(libFolderPath)) {
-        fs.mkdirSync(libFolderPath, {
-            recursive: true
-        });
-    }
-
+        if (!fs.existsSync(libFolderPath)) {
+            fs.mkdirSync(libFolderPath, {
+                recursive: true
+            });
+        }
 
 
-    try {
+
         // 下载
         const downJarResult = await downloadFile(jarUrl, jarPath,2);
         // console.log(downJarResult)
@@ -510,7 +518,8 @@ const downloadJar = async(url)=>{
         const result = await ua(url);
         // console.log(result)
         const dotPath = `${path.dirname(url)}/`;
-        const jarRegex = /(?<=['"]\s*spider\s*['"]\s*:\s*['"])(https?:\/\/|\.\/)([^\s'"]+\/)*([^\s'";}]+)/g
+        // const jarRegex = /(?<=['"]\s*spider\s*['"]\s*:\s*['"])(https?:\/\/|\.\/)([^\s'"]+\/)*([^\s'";}]+)/g
+        const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*(img\+)?)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
         const jarMatches = result.match(jarRegex);
         const jarUrlList = jarMatches.map(link => link.includes('./') ? link.replace(/\.\//, dotPath) : link);
         const jarurl = jarUrlList[0];
