@@ -7,6 +7,7 @@ import Store from 'electron-store';
 import stripComments from 'strip-comments';
 import { pipeline } from 'stream';
 import { pinyin } from 'pinyin-pro';
+import regex from './regex';
 const store = new Store();
 
 const desktopPath = require('os').homedir()+ '/Desktop'; //获取当前用户的桌面路径
@@ -47,8 +48,7 @@ const ua = async(url)=>{
             data
         } = await axios.get(url, {
             headers: {
-                "User-Agent": "okhttp/3.15",
-                'Allow':true
+                "User-Agent": "okhttp/3.15"
             }
         });
     
@@ -159,13 +159,9 @@ const downloadFiles = async(urlsList, folderPath)=> {
             if (fs.existsSync(drpyPath)) {
     
                 let drpyContent = fs.readFileSync(drpyPath, 'utf-8');
-                // const regex = /(import[^"']*["'])([^"']*\/)?([^"']*?\.(js|jsx|ts|tsx)["'])/g;
-                // const newDrpyContent = drpyContent.replace(regex, '$1$3');
-                // console.log("new",newDrpyContent);
     
-                const regex = /(import[^"']*["'])([^"']*\/)?([^"']*?\.(js|jsx|ts|tsx))/g;
                 const drpyFileNames = [];
-                const newDrpyContent = drpyContent.replace(regex, (match, p1, p2, p3, p4) => {
+                const newDrpyContent = drpyContent.replace(regex.drpyRegex, (match, p1, p2, p3, p4) => {
                 drpyFileNames.push(p3);
                 if (p2 === '') {
                     return match;
@@ -240,7 +236,7 @@ const getHashToWeb = async(url)=>{
 }
 
 const removeEmojiAndText = (text)=> {
-    const emojiRegex = /[^\w\u4e00-\u9fa5-]|家庭版|线路|专线/g;
+    const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线/g;
     return text.replace(emojiRegex, '');
 }
 const updateFiles = async(url,name,config) =>{
@@ -251,19 +247,13 @@ const updateFiles = async(url,name,config) =>{
         result = stripComments(result);
 
         const checkHashRes = result;
-
-        // fs.writeFileSync('test.json', result);
-        // return;
+        
         const dotPath = `${path.dirname(url)}/`;
 
-        // const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
-        const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*(img\+)?)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
-        const jarMatches = result.match(jarRegex)[0];
+        const jarMatches = result.match(regex.jarRegex)[0];
         const jarUrl =   jarMatches.includes('./') ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
         
-        // const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt))(?=\s*['";?])/g;
-        const linkRegex = /(?<!['"]\s*spider\s*['"]\s*:\s*['"])(?<=['"]\s*)(https?:\/\/|\.\/)(?:[^'"\s]+\/)?((?!tok)[^'"\s\/]+\.(?:json|js|py|jar|txt)(\?[^'"\s]+)?)(?=\s*['";])/g;
-        const linkMatches = result.match(linkRegex);
+        const linkMatches = result.match(regex.linkRegex);
         const linkUrlList = linkMatches.map(link => link.includes('./') ? link.replace(/\.\//, dotPath) : link);
         const urlsList = [...new Set([...linkUrlList].filter(url => url))];
         
@@ -278,32 +268,7 @@ const updateFiles = async(url,name,config) =>{
         let jarName = path.basename(jarUrl);
         // 处理文件夹名称或者单独配置项开始
         const urlToJSONName = {
-            '饭太硬': { name: 'fty',jarName:'fty.jar' },
-            // '肥猫': { name: 'feimao' },
-            // 'FongMi': { name: 'fongmi' },
-            // 'pastebin': { name: 'daozhang' },
-            // 'cainisi': { name: 'cainisi' },
-            // '101.34.67.237': { name: 'xiaoya' },
-            // 'jundie': { name: 'junyu' },
-            // 'dxawi': { name: 'dxawi' },
-            // 'liucn': { name: 'liucn' },
-            // 'ygbh': { name: 'ygbh' },
-            // 'xc': { name: 'xingchen' },
-            // 'download/2863': { name: 'xiaosa' },
-            // '云星日记': { name: 'yunxingriji' },
-            // '源享家': { name: 'yuanxiangjia' },
-            // 'download/2883': { name: 'mayiluntan' },
-            // '66666/mao': { name: 'fenxiangzhe' },
-            // 'binghe': { name: 'binghe' },
-            // 'chengxueli': { name: 'baixinyuan' },
-            // 'kebedd69': { name: 'tianmi' },
-            // 'xianyuyimu': { name: 'yimu' },
-            // 'kvymin': { name: 'kvymin' },
-            // 'a/b/c': { name: 'abc' },
-            // 'gaotianliuyun': { name: 'gaotianliuyun' },
-            // 'Yosakoii': { name: 'Yosakoii' },
-            // 'nxog': { name: 'nxog' },
-            // 'xiaohutx': { name: 'xiaohutx' }
+            '饭太硬': { name: 'fty',jarName:'fty.jar' }
         };
         
         for (const [key, value] of Object.entries(urlToJSONName)) {
@@ -339,9 +304,9 @@ const updateFiles = async(url,name,config) =>{
         console.log("失败资源数组",downLinkResult.errorValues)
         console.log("下载完成，开始处理json入口文件")
         // 处理json入口文件开始
-        const replaceResult = downJarResult.status == "success" ? result.replace(jarRegex, `./${jarName}`) : result;
+        const replaceResult = downJarResult.status == "success" ? result.replace(regex.jarRegex, `./${jarName}`) : result;
         // const replaceLink = replaceResult.replace(linkRegex, `./lib/$3`);
-        let replaceLink = replaceResult.replace(linkRegex, (match, p1, p2)=> {
+        let replaceLink = replaceResult.replace(regex.linkRegex, (match, p1, p2)=> {
             // 下载失败不改
             if(downLinkResult.errorValues.includes(match)){
                 console.log(match)
@@ -353,13 +318,16 @@ const updateFiles = async(url,name,config) =>{
 
 
         // 处理token开始
+
         let tokExt = `http://127.0.0.1:9978/file/${tvboxFolderName}/token.txt`;
+
         const { token = '', wallpaper } = config;
 
         // 处理壁纸
         if (wallpaper) {
-            replaceLink = replaceLink.replace(/(['"]wallpaper['"]\s*:\s*)(['"][^'"]*['"])/g, `$1"${wallpaper}"`)
+            replaceLink = replaceLink.replace(regex.wallpaperRegex, `$1"${wallpaper}"`)
         }
+
         if(token){
             if (token.includes('http') ||  token.includes('clan') || token.includes('tok')) {
                 tokExt = token
@@ -373,14 +341,19 @@ const updateFiles = async(url,name,config) =>{
         try{
             const parseJSON5 = JSON5.parse(replaceLink);
 
-            const apiSet = new Set(['csp_Paper', 'csp_YiSo', 'csp_PanSou', 'csp_UpYun', 'csp_Push', 'csp_Zhaozy', 'csp_Dovx', 'csp_WoGG','csp_PanSearch','csp_TuGou']);
-            // console.log("url",url)
-            parseJSON5.sites = parseJSON5.sites.map(site => {
-                return apiSet.has(site.api) ? {
-                    ...site,
-                    ext: tokExt
-                } : site;
-            });
+          
+
+
+            if(token){
+                const apiSet = new Set(['csp_Paper', 'csp_YiSo', 'csp_PanSou', 'csp_UpYun', 'csp_Push', 'csp_Zhaozy', 'csp_Dovx', 'csp_WoGG','csp_PanSearch','csp_TuGou']);
+                // console.log("url",url)
+                parseJSON5.sites = parseJSON5.sites.map(site => {
+                    return apiSet.has(site.api) ? {
+                        ...site,
+                        ext: tokExt
+                    } : site;
+                });
+            }
 
             // 单独处理一些JSON格式
             const urlToParseJSON5 = {
@@ -410,9 +383,11 @@ const updateFiles = async(url,name,config) =>{
             console.log("JSON5解析成功")
         }catch(error){
             // 处理错误json格式
-            replaceLink = replaceLink.replace(/['"]\s*(\w+)\s*['"]\s*:\s*([\w\u4e00-\u9fa5\-]+)\s*['"]/g, `"$1":"$2"`)
+            replaceLink = replaceLink.replace(regex.jsonerrRegex, `"$1":"$2"`)
             // 处理token
-            replaceLink = replaceLink.replace(/(['"]\s*api\s*['"]\s*:\s*['"]\s*(csp_Paper|csp_YiSo|csp_PanSou|csp_UpYun|csp_Push|csp_Zhaozy|csp_Dovx|csp_WoGG|csp_PanSearch|csp_TuGou|csp_Upyunso|csp_AliPS|csp_Yiso|csp_PushAgent|csp_Gitcafe)\s*['"].+['"]\s*ext\s*['"]\s*:\s*)(['"][^'"]*['"])/g, `$1"${tokExt}"`)
+            if(token){
+                replaceLink = replaceLink.replace(regex.tokenRegex, `$1"${tokExt}"`)
+            }
             stringifyJSON = replaceLink;
             console.error(`JSON5解析失败 at line ${error.lineNumber}, column ${error.columnNumber}`);
         }
@@ -519,8 +494,7 @@ const downloadJar = async(url)=>{
         // console.log(result)
         const dotPath = `${path.dirname(url)}/`;
         // const jarRegex = /(?<=['"]\s*spider\s*['"]\s*:\s*['"])(https?:\/\/|\.\/)([^\s'"]+\/)*([^\s'";}]+)/g
-        const jarRegex = /(?<=['"]?\s*spider\s*['"]?\s*:\s*['"]\s*(img\+)?)(https?:\/\/|\.\/)([^'"\s]+\/)?([^'"\s;?}]+)/g;
-        const jarMatches = result.match(jarRegex);
+        const jarMatches = result.match(regex.jarRegex);
         const jarUrlList = jarMatches.map(link => link.includes('./') ? link.replace(/\.\//, dotPath) : link);
         const jarurl = jarUrlList[0];
         let fileName = path.basename(jarurl);
@@ -563,7 +537,7 @@ const getJson = async () => {
         });
 
         // 过滤掉yydsys.top
-        const arrFilter = arr.filter(item=>!item.url.includes('yydsys.top'))
+        const arrFilter = arr.filter(item=>!item.url.includes('yydsys.top/duo/ali'))
 
         const uniqueArr = arrFilter.reduce((acc, cur) => {
             const hasDuplicate = acc.some(item => item.url === cur.url);

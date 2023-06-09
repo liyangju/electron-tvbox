@@ -73,30 +73,37 @@
       <template #default>
         <ul class="drawer-list">
           <li>
-            <p>自定义token<span>(可不填)</span></p>
+            <p>自定义Token<span></span></p>
             <div class="drawer-item-div">
               <el-input
                 v-model="config.token"
-                placeholder="支持token值或链接（默认：http://127.0.0.1:9978/file/tvbox/token.txt）"
+                placeholder="支持Token值或链接（如需统一Token，下载前需要设置Token值）"
               />
-              <el-button type="success" @click="tokenRefresh" :disabled="tokening"
-                >刷新Token</el-button
-              >
+
+              <el-tooltip effect="light" content="刷新Token值" placement="top">
+                <el-button @click="tokenRefresh" :disabled="tokening" :icon="Refresh"></el-button>
+              </el-tooltip>
+
+              
+              <!-- <el-tooltip effect="light" content="统一Token地址" placement="top">
+                <el-button @click="tokenUnify" :icon="House"></el-button>
+              </el-tooltip> -->
+
             </div>
           </li>
           <li>
-            <p>自定义壁纸<span>(可不填)</span></p>
+            <p>自定义壁纸<span></span></p>
             <el-input
               v-model="config.wallpaper"
-              placeholder="支持随机壁纸接口或本地壁纸（如：clan://localhost/xxx/1.png）"
+              placeholder="支持随机壁纸接口或本地壁纸（如：clan://localhost/tvbox/1.png）"
             />
           </li>
           <li>
-            <p>线路更新提醒<span>(选择一条常用的线路，若线路更新，会收到提醒通知)</span></p>
+            <p>线路更新提醒<span></span></p>
             <el-select
               v-model="config.lineTip.url"
               clearable
-              placeholder="请选择"
+              placeholder="请选择（若线路更新，会收到提醒通知）"
               @change="lineChange($event)"
             >
               <el-option
@@ -107,16 +114,18 @@
               />
             </el-select>
           </li>
-          <li>
-            <p>是否生成多线路</p>
-            <el-radio-group v-model="config.isLines">
+          <li class="flex">
+            <p>生成多线路</p>
+            <!-- <el-radio-group v-model="config.isLines">
               <el-radio :label="true" size="large">是</el-radio>
               <el-radio :label="false" size="large">否</el-radio>
-            </el-radio-group>
+            </el-radio-group> -->
+            
+            <el-switch v-model="config.isLines" />
           </li>
           <li>
             <el-text class="mx-info" type="info"
-              >所有配置数据仅保存本地，刷新完Token后需点击“保存配置”按钮</el-text
+              >所有配置数据仅保存本地，需点击“保存配置”按钮生效</el-text
             >
           </li>
         </ul>
@@ -195,7 +204,7 @@
 
 <script setup>
 import { ref, toRaw, reactive, onMounted } from 'vue'
-import { Refresh, Position } from '@element-plus/icons-vue'
+import { Refresh, Position,House} from '@element-plus/icons-vue'
 import JSON5 from 'json5'
 
 const urls = ref(JSON.parse(localStorage.getItem('urls')) || [])
@@ -462,6 +471,8 @@ const tokenRefresh = async () => {
   }
 }
 
+
+
 const lineUpdateTip = async () => {
   const configStr = await window.store.getItem('config')
   const url = configStr?.lineTip?.url
@@ -650,6 +661,11 @@ onMounted(() => {
         margin-left: 12px;
       }
     }
+  }
+  .flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 

@@ -21,6 +21,8 @@ class IpcHandlers {
     ipcMain.handle('actionToAndroid', IpcHandlers.handleActionToAndroid);
   }
 
+
+
   static async handleUpdate(event, url,name) {
     let result = await nodeApi.update(url,name);
     return result;
