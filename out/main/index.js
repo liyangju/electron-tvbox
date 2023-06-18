@@ -29,12 +29,13 @@ const regex = {
 const store$1 = new Store();
 const desktopPath$1 = require("os").homedir() + "/Desktop";
 const decryptAesBCB = async (encryptedData) => {
-  const dataArr = encryptedData.split("");
+  const dataArr = encryptedData.trim().split("");
   const prefixCode = Buffer.from("$#", "utf-8").toString("hex");
   const suffixCode = Buffer.from("#$", "utf-8").toString("hex");
   const pwdMix = dataArr.splice(0, encryptedData.indexOf(suffixCode) + 4).join("");
   const roundtimeInHax = dataArr.splice(dataArr.length - 26, 26).join("");
   const encryptedText = dataArr.join("");
+  console.log(roundtimeInHax.length, roundtimeInHax);
   const pwdInHax = pwdMix.substring(
     prefixCode.length,
     pwdMix.length - suffixCode.length
@@ -577,6 +578,7 @@ class TvBoxUploader {
     let formData = new FormData();
     formData.append("path", path2);
     for (let i = 0; i < files.length; i++) {
+      console.log(fs.createReadStream(files[i]));
       formData.append(`files-${i}`, fs.createReadStream(files[i]));
     }
     try {

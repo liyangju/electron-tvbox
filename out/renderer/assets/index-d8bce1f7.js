@@ -3,7 +3,7 @@ var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var require_index_001 = __commonJS({
-  "assets/index-ec251d95.js"(exports, module) {
+  "assets/index-d8bce1f7.js"(exports, module) {
     function makeMap(str, expectsLowerCase) {
       const map = /* @__PURE__ */ Object.create(null);
       const list = str.split(",");
@@ -32,7 +32,6 @@ var require_index_001 = __commonJS({
     const isArray$2 = Array.isArray;
     const isMap$2 = (val) => toTypeString(val) === "[object Map]";
     const isSet$2 = (val) => toTypeString(val) === "[object Set]";
-    const isDate = (val) => toTypeString(val) === "[object Date]";
     const isFunction$1 = (val) => typeof val === "function";
     const isString$1 = (val) => typeof val === "string";
     const isSymbol$1 = (val) => typeof val === "symbol";
@@ -153,54 +152,6 @@ var require_index_001 = __commonJS({
     const isSpecialBooleanAttr = /* @__PURE__ */ makeMap(specialBooleanAttrs);
     function includeBooleanAttr(value) {
       return !!value || value === "";
-    }
-    function looseCompareArrays(a, b) {
-      if (a.length !== b.length)
-        return false;
-      let equal = true;
-      for (let i = 0; equal && i < a.length; i++) {
-        equal = looseEqual(a[i], b[i]);
-      }
-      return equal;
-    }
-    function looseEqual(a, b) {
-      if (a === b)
-        return true;
-      let aValidType = isDate(a);
-      let bValidType = isDate(b);
-      if (aValidType || bValidType) {
-        return aValidType && bValidType ? a.getTime() === b.getTime() : false;
-      }
-      aValidType = isSymbol$1(a);
-      bValidType = isSymbol$1(b);
-      if (aValidType || bValidType) {
-        return a === b;
-      }
-      aValidType = isArray$2(a);
-      bValidType = isArray$2(b);
-      if (aValidType || bValidType) {
-        return aValidType && bValidType ? looseCompareArrays(a, b) : false;
-      }
-      aValidType = isObject$1(a);
-      bValidType = isObject$1(b);
-      if (aValidType || bValidType) {
-        if (!aValidType || !bValidType) {
-          return false;
-        }
-        const aKeysCount = Object.keys(a).length;
-        const bKeysCount = Object.keys(b).length;
-        if (aKeysCount !== bKeysCount) {
-          return false;
-        }
-        for (const key2 in a) {
-          const aHasKey = a.hasOwnProperty(key2);
-          const bHasKey = b.hasOwnProperty(key2);
-          if (aHasKey && !bHasKey || !aHasKey && bHasKey || !looseEqual(a[key2], b[key2])) {
-            return false;
-          }
-        }
-      }
-      return String(a) === String(b);
     }
     const toDisplayString = (val) => {
       return isString$1(val) ? val : val == null ? "" : isArray$2(val) || isObject$1(val) && (val.toString === objectToString$1 || !isFunction$1(val.toString)) ? JSON.stringify(val, replacer, 2) : String(val);
@@ -6556,24 +6507,6 @@ var require_index_001 = __commonJS({
         }
       }
     };
-    const vModelRadio = {
-      created(el, { value }, vnode) {
-        el.checked = looseEqual(value, vnode.props.value);
-        el._assign = getModelAssigner(vnode);
-        addEventListener(el, "change", () => {
-          el._assign(getValue$2(el));
-        });
-      },
-      beforeUpdate(el, { value, oldValue }, vnode) {
-        el._assign = getModelAssigner(vnode);
-        if (value !== oldValue) {
-          el.checked = looseEqual(value, vnode.props.value);
-        }
-      }
-    };
-    function getValue$2(el) {
-      return "_value" in el ? el._value : el.value;
-    }
     const systemModifiers = ["ctrl", "shift", "alt", "meta"];
     const modifierGuards = {
       stop: (e) => e.stopPropagation(),
@@ -10492,12 +10425,12 @@ var require_index_001 = __commonJS({
         type: String
       }
     });
-    const __default__$q = defineComponent({
+    const __default__$o = defineComponent({
       name: "ElIcon",
       inheritAttrs: false
     });
-    const _sfc_main$E = /* @__PURE__ */ defineComponent({
-      ...__default__$q,
+    const _sfc_main$C = /* @__PURE__ */ defineComponent({
+      ...__default__$o,
       props: iconProps,
       setup(__props) {
         const props = __props;
@@ -10521,7 +10454,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$E, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
+    var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$C, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
     const ElIcon = withInstall(Icon);
     const formContextKey = Symbol("formContextKey");
     const formItemContextKey = Symbol("formItemContextKey");
@@ -10680,12 +10613,12 @@ var require_index_001 = __commonJS({
       const normalized = castArray(props);
       return normalized.length > 0 ? fields.filter((field) => field.prop && normalized.includes(field.prop)) : fields;
     };
-    const COMPONENT_NAME$5 = "ElForm";
-    const __default__$p = defineComponent({
-      name: COMPONENT_NAME$5
+    const COMPONENT_NAME$6 = "ElForm";
+    const __default__$n = defineComponent({
+      name: COMPONENT_NAME$6
     });
-    const _sfc_main$D = /* @__PURE__ */ defineComponent({
-      ...__default__$p,
+    const _sfc_main$B = /* @__PURE__ */ defineComponent({
+      ...__default__$n,
       props: formProps,
       emits: formEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -10813,7 +10746,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Form = /* @__PURE__ */ _export_sfc$1(_sfc_main$D, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/form/src/form.vue"]]);
+    var Form = /* @__PURE__ */ _export_sfc$1(_sfc_main$B, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/form/src/form.vue"]]);
     function _extends() {
       _extends = Object.assign ? Object.assign.bind() : function(target) {
         for (var i = 1; i < arguments.length; i++) {
@@ -11908,9 +11841,9 @@ var require_index_001 = __commonJS({
         values: componentSizes
       }
     });
-    const COMPONENT_NAME$4 = "ElLabelWrap";
+    const COMPONENT_NAME$5 = "ElLabelWrap";
     var FormLabelWrap = defineComponent({
-      name: COMPONENT_NAME$4,
+      name: COMPONENT_NAME$5,
       props: {
         isAutoWidth: Boolean,
         updateAll: Boolean
@@ -11921,7 +11854,7 @@ var require_index_001 = __commonJS({
         const formContext = inject(formContextKey, void 0);
         const formItemContext = inject(formItemContextKey);
         if (!formItemContext)
-          throwError(COMPONENT_NAME$4, "usage: <el-form-item><label-wrap /></el-form-item>");
+          throwError(COMPONENT_NAME$5, "usage: <el-form-item><label-wrap /></el-form-item>");
         const ns = useNamespace("form");
         const el = ref();
         const computedWidth = ref(0);
@@ -11993,12 +11926,12 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    const _hoisted_1$g = ["role", "aria-labelledby"];
-    const __default__$o = defineComponent({
+    const _hoisted_1$e = ["role", "aria-labelledby"];
+    const __default__$m = defineComponent({
       name: "ElFormItem"
     });
-    const _sfc_main$C = /* @__PURE__ */ defineComponent({
-      ...__default__$o,
+    const _sfc_main$A = /* @__PURE__ */ defineComponent({
+      ...__default__$m,
       props: formItemProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -12289,11 +12222,11 @@ var require_index_001 = __commonJS({
                 _: 3
               }, 8, ["name"])
             ], 6)
-          ], 10, _hoisted_1$g);
+          ], 10, _hoisted_1$e);
         };
       }
     });
-    var FormItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$C, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/form/src/form-item.vue"]]);
+    var FormItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$A, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/form/src/form-item.vue"]]);
     const ElForm = withInstall(Form, {
       FormItem
     });
@@ -12471,15 +12404,15 @@ var require_index_001 = __commonJS({
       compositionupdate: (evt) => evt instanceof CompositionEvent,
       compositionend: (evt) => evt instanceof CompositionEvent
     };
-    const _hoisted_1$f = ["role"];
-    const _hoisted_2$a = ["id", "type", "disabled", "formatter", "parser", "readonly", "autocomplete", "tabindex", "aria-label", "placeholder", "form"];
-    const _hoisted_3$7 = ["id", "tabindex", "disabled", "readonly", "autocomplete", "aria-label", "placeholder", "form"];
-    const __default__$n = defineComponent({
+    const _hoisted_1$d = ["role"];
+    const _hoisted_2$b = ["id", "type", "disabled", "formatter", "parser", "readonly", "autocomplete", "tabindex", "aria-label", "placeholder", "form"];
+    const _hoisted_3$8 = ["id", "tabindex", "disabled", "readonly", "autocomplete", "aria-label", "placeholder", "form"];
+    const __default__$l = defineComponent({
       name: "ElInput",
       inheritAttrs: false
     });
-    const _sfc_main$B = /* @__PURE__ */ defineComponent({
-      ...__default__$n,
+    const _sfc_main$z = /* @__PURE__ */ defineComponent({
+      ...__default__$l,
       props: inputProps,
       emits: inputEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -12795,7 +12728,7 @@ var require_index_001 = __commonJS({
                   onBlur: handleBlur,
                   onChange: handleChange,
                   onKeydown: handleKeydown
-                }), null, 16, _hoisted_2$a),
+                }), null, 16, _hoisted_2$b),
                 createCommentVNode(" suffix slot "),
                 unref(suffixVisible) ? (openBlock(), createElementBlock("span", {
                   key: 1,
@@ -12893,20 +12826,20 @@ var require_index_001 = __commonJS({
                 onBlur: handleBlur,
                 onChange: handleChange,
                 onKeydown: handleKeydown
-              }), null, 16, _hoisted_3$7),
+              }), null, 16, _hoisted_3$8),
               unref(isWordLimitVisible) ? (openBlock(), createElementBlock("span", {
                 key: 0,
                 style: normalizeStyle(countStyle.value),
                 class: normalizeClass(unref(nsInput).e("count"))
               }, toDisplayString(unref(textLength)) + " / " + toDisplayString(unref(attrs).maxlength), 7)) : createCommentVNode("v-if", true)
             ], 64))
-          ], 16, _hoisted_1$f)), [
+          ], 16, _hoisted_1$d)), [
             [vShow, _ctx.type !== "hidden"]
           ]);
         };
       }
     });
-    var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$B, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
+    var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$z, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
     const ElInput = withInstall(Input);
     const GAP = 4;
     const BAR_MAP = {
@@ -12950,8 +12883,8 @@ var require_index_001 = __commonJS({
       },
       always: Boolean
     });
-    const COMPONENT_NAME$3 = "Thumb";
-    const _sfc_main$A = /* @__PURE__ */ defineComponent({
+    const COMPONENT_NAME$4 = "Thumb";
+    const _sfc_main$y = /* @__PURE__ */ defineComponent({
       __name: "thumb",
       props: thumbProps,
       setup(__props) {
@@ -12959,7 +12892,7 @@ var require_index_001 = __commonJS({
         const scrollbar = inject(scrollbarContextKey);
         const ns = useNamespace("scrollbar");
         if (!scrollbar)
-          throwError(COMPONENT_NAME$3, "can not inject scrollbar context");
+          throwError(COMPONENT_NAME$4, "can not inject scrollbar context");
         const instance = ref();
         const thumb = ref();
         const thumbState = ref({});
@@ -13070,7 +13003,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$A, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
+    var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$y, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
     const barProps = buildProps({
       always: {
         type: Boolean,
@@ -13087,7 +13020,7 @@ var require_index_001 = __commonJS({
         default: 1
       }
     });
-    const _sfc_main$z = /* @__PURE__ */ defineComponent({
+    const _sfc_main$x = /* @__PURE__ */ defineComponent({
       __name: "bar",
       props: barProps,
       setup(__props, { expose }) {
@@ -13124,7 +13057,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$z, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
+    var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$x, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
     const scrollbarProps = buildProps({
       height: {
         type: [String, Number],
@@ -13171,12 +13104,12 @@ var require_index_001 = __commonJS({
         scrollLeft
       }) => [scrollTop, scrollLeft].every(isNumber)
     };
-    const COMPONENT_NAME$2 = "ElScrollbar";
-    const __default__$m = defineComponent({
-      name: COMPONENT_NAME$2
+    const COMPONENT_NAME$3 = "ElScrollbar";
+    const __default__$k = defineComponent({
+      name: COMPONENT_NAME$3
     });
-    const _sfc_main$y = /* @__PURE__ */ defineComponent({
-      ...__default__$m,
+    const _sfc_main$w = /* @__PURE__ */ defineComponent({
+      ...__default__$k,
       props: scrollbarProps,
       emits: scrollbarEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -13330,7 +13263,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$y, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
+    var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$w, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
     const ElScrollbar = withInstall(Scrollbar);
     const POPPER_INJECTION_KEY = Symbol("popper");
     const POPPER_CONTENT_INJECTION_KEY = Symbol("popperContent");
@@ -13351,12 +13284,12 @@ var require_index_001 = __commonJS({
         default: "tooltip"
       }
     });
-    const __default__$l = defineComponent({
+    const __default__$j = defineComponent({
       name: "ElPopper",
       inheritAttrs: false
     });
-    const _sfc_main$x = /* @__PURE__ */ defineComponent({
-      ...__default__$l,
+    const _sfc_main$v = /* @__PURE__ */ defineComponent({
+      ...__default__$j,
       props: popperProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -13379,19 +13312,19 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$x, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
+    var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$v, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
     const popperArrowProps = buildProps({
       arrowOffset: {
         type: Number,
         default: 5
       }
     });
-    const __default__$k = defineComponent({
+    const __default__$i = defineComponent({
       name: "ElPopperArrow",
       inheritAttrs: false
     });
-    const _sfc_main$w = /* @__PURE__ */ defineComponent({
-      ...__default__$k,
+    const _sfc_main$u = /* @__PURE__ */ defineComponent({
+      ...__default__$i,
       props: popperArrowProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -13417,7 +13350,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$w, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
+    var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
     const NAME = "ElOnlyChild";
     const OnlyChild = defineComponent({
       name: NAME,
@@ -13501,12 +13434,12 @@ var require_index_001 = __commonJS({
       id: String,
       open: Boolean
     });
-    const __default__$j = defineComponent({
+    const __default__$h = defineComponent({
       name: "ElPopperTrigger",
       inheritAttrs: false
     });
-    const _sfc_main$v = /* @__PURE__ */ defineComponent({
-      ...__default__$j,
+    const _sfc_main$t = /* @__PURE__ */ defineComponent({
+      ...__default__$h,
       props: popperTriggerProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -13604,7 +13537,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$v, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
+    var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
     const FOCUS_AFTER_TRAPPED = "focus-trap.focus-after-trapped";
     const FOCUS_AFTER_RELEASED = "focus-trap.focus-after-released";
     const FOCUSOUT_PREVENTED = "focus-trap.focusout-prevented";
@@ -13751,7 +13684,7 @@ var require_index_001 = __commonJS({
         detail
       });
     };
-    const _sfc_main$u = defineComponent({
+    const _sfc_main$s = defineComponent({
       name: "ElFocusTrap",
       inheritAttrs: false,
       props: {
@@ -13990,7 +13923,7 @@ var require_index_001 = __commonJS({
     function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
       return renderSlot(_ctx.$slots, "default", { handleKeydown: _ctx.onKeydown });
     }
-    var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["render", _sfc_render$8], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
+    var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["render", _sfc_render$8], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
     const POSITIONING_STRATEGIES = ["fixed", "absolute"];
     const popperCoreConfigProps = buildProps({
       boundariesPadding: {
@@ -14275,11 +14208,11 @@ var require_index_001 = __commonJS({
         onReleaseRequested
       };
     };
-    const __default__$i = defineComponent({
+    const __default__$g = defineComponent({
       name: "ElPopperContent"
     });
-    const _sfc_main$t = /* @__PURE__ */ defineComponent({
-      ...__default__$i,
+    const _sfc_main$r = /* @__PURE__ */ defineComponent({
+      ...__default__$g,
       props: popperContentProps,
       emits: popperContentEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -14395,7 +14328,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
+    var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
     const ElPopper = withInstall(Popper);
     const TOOLTIP_INJECTION_KEY = Symbol("elTooltip");
     const useTooltipContentProps = buildProps({
@@ -14473,11 +14406,11 @@ var require_index_001 = __commonJS({
         isTriggerType(unref(trigger2), type2) && handler(e);
       };
     };
-    const __default__$h = defineComponent({
+    const __default__$f = defineComponent({
       name: "ElTooltipTrigger"
     });
-    const _sfc_main$s = /* @__PURE__ */ defineComponent({
-      ...__default__$h,
+    const _sfc_main$q = /* @__PURE__ */ defineComponent({
+      ...__default__$f,
       props: useTooltipTriggerProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -14536,13 +14469,13 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
-    const __default__$g = defineComponent({
+    var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
+    const __default__$e = defineComponent({
       name: "ElTooltipContent",
       inheritAttrs: false
     });
-    const _sfc_main$r = /* @__PURE__ */ defineComponent({
-      ...__default__$g,
+    const _sfc_main$p = /* @__PURE__ */ defineComponent({
+      ...__default__$e,
       props: useTooltipContentProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -14700,14 +14633,14 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
-    const _hoisted_1$e = ["innerHTML"];
-    const _hoisted_2$9 = { key: 1 };
-    const __default__$f = defineComponent({
+    var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
+    const _hoisted_1$c = ["innerHTML"];
+    const _hoisted_2$a = { key: 1 };
+    const __default__$d = defineComponent({
       name: "ElTooltip"
     });
-    const _sfc_main$q = /* @__PURE__ */ defineComponent({
-      ...__default__$f,
+    const _sfc_main$o = /* @__PURE__ */ defineComponent({
+      ...__default__$d,
       props: useTooltipProps,
       emits: tooltipEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -14843,7 +14776,7 @@ var require_index_001 = __commonJS({
                     _ctx.rawContent ? (openBlock(), createElementBlock("span", {
                       key: 0,
                       innerHTML: _ctx.content
-                    }, null, 8, _hoisted_1$e)) : (openBlock(), createElementBlock("span", _hoisted_2$9, toDisplayString(_ctx.content), 1))
+                    }, null, 8, _hoisted_1$c)) : (openBlock(), createElementBlock("span", _hoisted_2$a, toDisplayString(_ctx.content), 1))
                   ]),
                   _ctx.showArrow ? (openBlock(), createBlock(unref(ElPopperArrow), {
                     key: 0,
@@ -14858,7 +14791,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
+    var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
     const ElTooltip = withInstall(Tooltip);
     const autocompleteProps = buildProps({
       valueKey: {
@@ -14936,16 +14869,16 @@ var require_index_001 = __commonJS({
       clear: () => true,
       select: (item) => isObject$1(item)
     };
-    const _hoisted_1$d = ["aria-expanded", "aria-owns"];
-    const _hoisted_2$8 = { key: 0 };
-    const _hoisted_3$6 = ["id", "aria-selected", "onClick"];
-    const COMPONENT_NAME$1 = "ElAutocomplete";
-    const __default__$e = defineComponent({
-      name: COMPONENT_NAME$1,
+    const _hoisted_1$b = ["aria-expanded", "aria-owns"];
+    const _hoisted_2$9 = { key: 0 };
+    const _hoisted_3$7 = ["id", "aria-selected", "onClick"];
+    const COMPONENT_NAME$2 = "ElAutocomplete";
+    const __default__$c = defineComponent({
+      name: COMPONENT_NAME$2,
       inheritAttrs: false
     });
-    const _sfc_main$p = /* @__PURE__ */ defineComponent({
-      ...__default__$e,
+    const _sfc_main$n = /* @__PURE__ */ defineComponent({
+      ...__default__$c,
       props: autocompleteProps,
       emits: autocompleteEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -14999,7 +14932,7 @@ var require_index_001 = __commonJS({
               suggestions.value = suggestionList;
               highlightedIndex.value = props.highlightFirstItem ? 0 : -1;
             } else {
-              throwError(COMPONENT_NAME$1, "autocomplete suggestions must be an array");
+              throwError(COMPONENT_NAME$2, "autocomplete suggestions must be an array");
             }
           };
           loading.value = true;
@@ -15183,7 +15116,7 @@ var require_index_001 = __commonJS({
                   role: "listbox"
                 }, {
                   default: withCtx(() => [
-                    unref(suggestionLoading) ? (openBlock(), createElementBlock("li", _hoisted_2$8, [
+                    unref(suggestionLoading) ? (openBlock(), createElementBlock("li", _hoisted_2$9, [
                       createVNode(unref(ElIcon), {
                         class: normalizeClass(unref(ns).is("loading"))
                       }, {
@@ -15204,7 +15137,7 @@ var require_index_001 = __commonJS({
                         renderSlot(_ctx.$slots, "default", { item }, () => [
                           createTextVNode(toDisplayString(item[_ctx.valueKey]), 1)
                         ])
-                      ], 10, _hoisted_3$6);
+                      ], 10, _hoisted_3$7);
                     }), 128))
                   ]),
                   _: 3
@@ -15269,14 +15202,14 @@ var require_index_001 = __commonJS({
                     ])
                   } : void 0
                 ]), 1040, ["clearable", "disabled", "name", "model-value", "onKeydown"])
-              ], 14, _hoisted_1$d)
+              ], 14, _hoisted_1$b)
             ]),
             _: 3
           }, 8, ["visible", "placement", "popper-class", "teleported", "transition"]);
         };
       }
     });
-    var Autocomplete = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/autocomplete/src/autocomplete.vue"]]);
+    var Autocomplete = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/autocomplete/src/autocomplete.vue"]]);
     const ElAutocomplete = withInstall(Autocomplete);
     const badgeProps = buildProps({
       value: {
@@ -15295,12 +15228,12 @@ var require_index_001 = __commonJS({
         default: "danger"
       }
     });
-    const _hoisted_1$c = ["textContent"];
-    const __default__$d = defineComponent({
+    const _hoisted_1$a = ["textContent"];
+    const __default__$b = defineComponent({
       name: "ElBadge"
     });
-    const _sfc_main$o = /* @__PURE__ */ defineComponent({
-      ...__default__$d,
+    const _sfc_main$m = /* @__PURE__ */ defineComponent({
+      ...__default__$b,
       props: badgeProps,
       setup(__props, { expose }) {
         const props = __props;
@@ -15334,7 +15267,7 @@ var require_index_001 = __commonJS({
                     unref(ns).is("dot", _ctx.isDot)
                   ]),
                   textContent: toDisplayString(unref(content))
-                }, null, 10, _hoisted_1$c), [
+                }, null, 10, _hoisted_1$a), [
                   [vShow, !_ctx.hidden && (unref(content) || _ctx.isDot)]
                 ])
               ]),
@@ -15344,7 +15277,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Badge = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/badge/src/badge.vue"]]);
+    var Badge = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/badge/src/badge.vue"]]);
     const ElBadge = withInstall(Badge);
     const buttonGroupContextKey = Symbol("buttonGroupContextKey");
     const useButton = (props, emit2) => {
@@ -16395,11 +16328,11 @@ var require_index_001 = __commonJS({
         return styles;
       });
     }
-    const __default__$c = defineComponent({
+    const __default__$a = defineComponent({
       name: "ElButton"
     });
-    const _sfc_main$n = /* @__PURE__ */ defineComponent({
-      ...__default__$c,
+    const _sfc_main$l = /* @__PURE__ */ defineComponent({
+      ...__default__$a,
       props: buttonProps,
       emits: buttonEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -16464,16 +16397,16 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
+    var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
     const buttonGroupProps = {
       size: buttonProps.size,
       type: buttonProps.type
     };
-    const __default__$b = defineComponent({
+    const __default__$9 = defineComponent({
       name: "ElButtonGroup"
     });
-    const _sfc_main$m = /* @__PURE__ */ defineComponent({
-      ...__default__$b,
+    const _sfc_main$k = /* @__PURE__ */ defineComponent({
+      ...__default__$9,
       props: buttonGroupProps,
       setup(__props) {
         const props = __props;
@@ -16491,7 +16424,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
+    var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
     const ElButton = withInstall(Button, {
       ButtonGroup
     });
@@ -16608,294 +16541,6 @@ var require_index_001 = __commonJS({
         }
       }
     };
-    const radioPropsBase = buildProps({
-      size: useSizeProp,
-      disabled: Boolean,
-      label: {
-        type: [String, Number, Boolean],
-        default: ""
-      }
-    });
-    const radioProps = buildProps({
-      ...radioPropsBase,
-      modelValue: {
-        type: [String, Number, Boolean],
-        default: ""
-      },
-      name: {
-        type: String,
-        default: ""
-      },
-      border: Boolean
-    });
-    const radioEmits = {
-      [UPDATE_MODEL_EVENT]: (val) => isString$1(val) || isNumber(val) || isBoolean(val),
-      [CHANGE_EVENT]: (val) => isString$1(val) || isNumber(val) || isBoolean(val)
-    };
-    const radioGroupKey = Symbol("radioGroupKey");
-    const useRadio = (props, emit2) => {
-      const radioRef = ref();
-      const radioGroup = inject(radioGroupKey, void 0);
-      const isGroup = computed(() => !!radioGroup);
-      const modelValue = computed({
-        get() {
-          return isGroup.value ? radioGroup.modelValue : props.modelValue;
-        },
-        set(val) {
-          if (isGroup.value) {
-            radioGroup.changeEvent(val);
-          } else {
-            emit2 && emit2(UPDATE_MODEL_EVENT, val);
-          }
-          radioRef.value.checked = props.modelValue === props.label;
-        }
-      });
-      const size2 = useFormSize(computed(() => radioGroup == null ? void 0 : radioGroup.size));
-      const disabled = useFormDisabled(computed(() => radioGroup == null ? void 0 : radioGroup.disabled));
-      const focus = ref(false);
-      const tabIndex = computed(() => {
-        return disabled.value || isGroup.value && modelValue.value !== props.label ? -1 : 0;
-      });
-      return {
-        radioRef,
-        isGroup,
-        radioGroup,
-        focus,
-        size: size2,
-        disabled,
-        tabIndex,
-        modelValue
-      };
-    };
-    const _hoisted_1$b = ["value", "name", "disabled"];
-    const __default__$a = defineComponent({
-      name: "ElRadio"
-    });
-    const _sfc_main$l = /* @__PURE__ */ defineComponent({
-      ...__default__$a,
-      props: radioProps,
-      emits: radioEmits,
-      setup(__props, { emit: emit2 }) {
-        const props = __props;
-        const ns = useNamespace("radio");
-        const { radioRef, radioGroup, focus, size: size2, disabled, modelValue } = useRadio(props, emit2);
-        function handleChange() {
-          nextTick(() => emit2("change", modelValue.value));
-        }
-        return (_ctx, _cache) => {
-          var _a2;
-          return openBlock(), createElementBlock("label", {
-            class: normalizeClass([
-              unref(ns).b(),
-              unref(ns).is("disabled", unref(disabled)),
-              unref(ns).is("focus", unref(focus)),
-              unref(ns).is("bordered", _ctx.border),
-              unref(ns).is("checked", unref(modelValue) === _ctx.label),
-              unref(ns).m(unref(size2))
-            ])
-          }, [
-            createBaseVNode("span", {
-              class: normalizeClass([
-                unref(ns).e("input"),
-                unref(ns).is("disabled", unref(disabled)),
-                unref(ns).is("checked", unref(modelValue) === _ctx.label)
-              ])
-            }, [
-              withDirectives(createBaseVNode("input", {
-                ref_key: "radioRef",
-                ref: radioRef,
-                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => isRef(modelValue) ? modelValue.value = $event : null),
-                class: normalizeClass(unref(ns).e("original")),
-                value: _ctx.label,
-                name: _ctx.name || ((_a2 = unref(radioGroup)) == null ? void 0 : _a2.name),
-                disabled: unref(disabled),
-                type: "radio",
-                onFocus: _cache[1] || (_cache[1] = ($event) => focus.value = true),
-                onBlur: _cache[2] || (_cache[2] = ($event) => focus.value = false),
-                onChange: handleChange
-              }, null, 42, _hoisted_1$b), [
-                [vModelRadio, unref(modelValue)]
-              ]),
-              createBaseVNode("span", {
-                class: normalizeClass(unref(ns).e("inner"))
-              }, null, 2)
-            ], 2),
-            createBaseVNode("span", {
-              class: normalizeClass(unref(ns).e("label")),
-              onKeydown: _cache[3] || (_cache[3] = withModifiers(() => {
-              }, ["stop"]))
-            }, [
-              renderSlot(_ctx.$slots, "default", {}, () => [
-                createTextVNode(toDisplayString(_ctx.label), 1)
-              ])
-            ], 34)
-          ], 2);
-        };
-      }
-    });
-    var Radio = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/radio/src/radio.vue"]]);
-    const radioButtonProps = buildProps({
-      ...radioPropsBase,
-      name: {
-        type: String,
-        default: ""
-      }
-    });
-    const _hoisted_1$a = ["value", "name", "disabled"];
-    const __default__$9 = defineComponent({
-      name: "ElRadioButton"
-    });
-    const _sfc_main$k = /* @__PURE__ */ defineComponent({
-      ...__default__$9,
-      props: radioButtonProps,
-      setup(__props) {
-        const props = __props;
-        const ns = useNamespace("radio");
-        const { radioRef, focus, size: size2, disabled, modelValue, radioGroup } = useRadio(props);
-        const activeStyle = computed(() => {
-          return {
-            backgroundColor: (radioGroup == null ? void 0 : radioGroup.fill) || "",
-            borderColor: (radioGroup == null ? void 0 : radioGroup.fill) || "",
-            boxShadow: (radioGroup == null ? void 0 : radioGroup.fill) ? `-1px 0 0 0 ${radioGroup.fill}` : "",
-            color: (radioGroup == null ? void 0 : radioGroup.textColor) || ""
-          };
-        });
-        return (_ctx, _cache) => {
-          var _a2;
-          return openBlock(), createElementBlock("label", {
-            class: normalizeClass([
-              unref(ns).b("button"),
-              unref(ns).is("active", unref(modelValue) === _ctx.label),
-              unref(ns).is("disabled", unref(disabled)),
-              unref(ns).is("focus", unref(focus)),
-              unref(ns).bm("button", unref(size2))
-            ])
-          }, [
-            withDirectives(createBaseVNode("input", {
-              ref_key: "radioRef",
-              ref: radioRef,
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => isRef(modelValue) ? modelValue.value = $event : null),
-              class: normalizeClass(unref(ns).be("button", "original-radio")),
-              value: _ctx.label,
-              type: "radio",
-              name: _ctx.name || ((_a2 = unref(radioGroup)) == null ? void 0 : _a2.name),
-              disabled: unref(disabled),
-              onFocus: _cache[1] || (_cache[1] = ($event) => focus.value = true),
-              onBlur: _cache[2] || (_cache[2] = ($event) => focus.value = false)
-            }, null, 42, _hoisted_1$a), [
-              [vModelRadio, unref(modelValue)]
-            ]),
-            createBaseVNode("span", {
-              class: normalizeClass(unref(ns).be("button", "inner")),
-              style: normalizeStyle(unref(modelValue) === _ctx.label ? unref(activeStyle) : {}),
-              onKeydown: _cache[3] || (_cache[3] = withModifiers(() => {
-              }, ["stop"]))
-            }, [
-              renderSlot(_ctx.$slots, "default", {}, () => [
-                createTextVNode(toDisplayString(_ctx.label), 1)
-              ])
-            ], 38)
-          ], 2);
-        };
-      }
-    });
-    var RadioButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/radio/src/radio-button.vue"]]);
-    const radioGroupProps = buildProps({
-      id: {
-        type: String,
-        default: void 0
-      },
-      size: useSizeProp,
-      disabled: Boolean,
-      modelValue: {
-        type: [String, Number, Boolean],
-        default: ""
-      },
-      fill: {
-        type: String,
-        default: ""
-      },
-      label: {
-        type: String,
-        default: void 0
-      },
-      textColor: {
-        type: String,
-        default: ""
-      },
-      name: {
-        type: String,
-        default: void 0
-      },
-      validateEvent: {
-        type: Boolean,
-        default: true
-      }
-    });
-    const radioGroupEmits = radioEmits;
-    const _hoisted_1$9 = ["id", "aria-label", "aria-labelledby"];
-    const __default__$8 = defineComponent({
-      name: "ElRadioGroup"
-    });
-    const _sfc_main$j = /* @__PURE__ */ defineComponent({
-      ...__default__$8,
-      props: radioGroupProps,
-      emits: radioGroupEmits,
-      setup(__props, { emit: emit2 }) {
-        const props = __props;
-        const ns = useNamespace("radio");
-        const radioId = useId();
-        const radioGroupRef = ref();
-        const { formItem } = useFormItem();
-        const { inputId: groupId, isLabeledByFormItem } = useFormItemInputId(props, {
-          formItemContext: formItem
-        });
-        const changeEvent = (value) => {
-          emit2(UPDATE_MODEL_EVENT, value);
-          nextTick(() => emit2("change", value));
-        };
-        onMounted(() => {
-          const radios = radioGroupRef.value.querySelectorAll("[type=radio]");
-          const firstLabel = radios[0];
-          if (!Array.from(radios).some((radio) => radio.checked) && firstLabel) {
-            firstLabel.tabIndex = 0;
-          }
-        });
-        const name = computed(() => {
-          return props.name || radioId.value;
-        });
-        provide(radioGroupKey, reactive({
-          ...toRefs(props),
-          changeEvent,
-          name
-        }));
-        watch(() => props.modelValue, () => {
-          if (props.validateEvent) {
-            formItem == null ? void 0 : formItem.validate("change").catch((err) => debugWarn());
-          }
-        });
-        return (_ctx, _cache) => {
-          return openBlock(), createElementBlock("div", {
-            id: unref(groupId),
-            ref_key: "radioGroupRef",
-            ref: radioGroupRef,
-            class: normalizeClass(unref(ns).b("group")),
-            role: "radiogroup",
-            "aria-label": !unref(isLabeledByFormItem) ? _ctx.label || "radio-group" : void 0,
-            "aria-labelledby": unref(isLabeledByFormItem) ? unref(formItem).labelId : void 0
-          }, [
-            renderSlot(_ctx.$slots, "default")
-          ], 10, _hoisted_1$9);
-        };
-      }
-    });
-    var RadioGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/radio/src/radio-group.vue"]]);
-    const ElRadio = withInstall(Radio, {
-      RadioButton,
-      RadioGroup
-    });
-    const ElRadioGroup = withNoopInstall(RadioGroup);
-    withNoopInstall(RadioButton);
     const tagProps = buildProps({
       type: {
         type: String,
@@ -16925,11 +16570,11 @@ var require_index_001 = __commonJS({
       close: (evt) => evt instanceof MouseEvent,
       click: (evt) => evt instanceof MouseEvent
     };
-    const __default__$7 = defineComponent({
+    const __default__$8 = defineComponent({
       name: "ElTag"
     });
-    const _sfc_main$i = /* @__PURE__ */ defineComponent({
-      ...__default__$7,
+    const _sfc_main$j = /* @__PURE__ */ defineComponent({
+      ...__default__$8,
       props: tagProps,
       emits: tagEmits,
       setup(__props, { emit: emit2 }) {
@@ -17009,7 +16654,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
+    var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
     const ElTag = withInstall(Tag);
     const overlayProps = buildProps({
       mask: {
@@ -17106,11 +16751,11 @@ var require_index_001 = __commonJS({
     const dialogContentEmits = {
       close: () => true
     };
-    const _hoisted_1$8 = ["aria-label"];
-    const _hoisted_2$7 = ["id"];
-    const __default__$6 = defineComponent({ name: "ElDialogContent" });
-    const _sfc_main$h = /* @__PURE__ */ defineComponent({
-      ...__default__$6,
+    const _hoisted_1$9 = ["aria-label"];
+    const _hoisted_2$8 = ["id"];
+    const __default__$7 = defineComponent({ name: "ElDialogContent" });
+    const _sfc_main$i = /* @__PURE__ */ defineComponent({
+      ...__default__$7,
       props: dialogContentProps,
       emits: dialogContentEmits,
       setup(__props) {
@@ -17162,14 +16807,14 @@ var require_index_001 = __commonJS({
                   ]),
                   _: 1
                 }, 8, ["class"])
-              ], 10, _hoisted_1$8)) : createCommentVNode("v-if", true)
+              ], 10, _hoisted_1$9)) : createCommentVNode("v-if", true)
             ], 2),
             createBaseVNode("div", {
               id: unref(bodyId),
               class: normalizeClass(unref(ns).e("body"))
             }, [
               renderSlot(_ctx.$slots, "default")
-            ], 10, _hoisted_2$7),
+            ], 10, _hoisted_2$8),
             _ctx.$slots.footer ? (openBlock(), createElementBlock("footer", {
               key: 0,
               class: normalizeClass(unref(ns).e("footer"))
@@ -17180,7 +16825,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var ElDialogContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/dialog/src/dialog-content.vue"]]);
+    var ElDialogContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/dialog/src/dialog-content.vue"]]);
     const dialogProps = buildProps({
       ...dialogContentProps,
       appendToBody: {
@@ -17413,13 +17058,13 @@ var require_index_001 = __commonJS({
         zIndex: zIndex2
       };
     };
-    const _hoisted_1$7 = ["aria-label", "aria-labelledby", "aria-describedby"];
-    const __default__$5 = defineComponent({
+    const _hoisted_1$8 = ["aria-label", "aria-labelledby", "aria-describedby"];
+    const __default__$6 = defineComponent({
       name: "ElDialog",
       inheritAttrs: false
     });
-    const _sfc_main$g = /* @__PURE__ */ defineComponent({
-      ...__default__$5,
+    const _sfc_main$h = /* @__PURE__ */ defineComponent({
+      ...__default__$6,
       props: dialogProps,
       emits: dialogEmits,
       setup(__props, { expose }) {
@@ -17556,7 +17201,7 @@ var require_index_001 = __commonJS({
                         ]),
                         _: 3
                       }, 8, ["trapped", "onFocusAfterTrapped", "onFocusAfterReleased", "onFocusoutPrevented", "onReleaseRequested"])
-                    ], 46, _hoisted_1$7)
+                    ], 46, _hoisted_1$8)
                   ]),
                   _: 3
                 }, 8, ["mask", "overlay-class", "z-index"]), [
@@ -17569,7 +17214,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Dialog = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/dialog/src/dialog.vue"]]);
+    var Dialog = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/dialog/src/dialog.vue"]]);
     const ElDialog = withInstall(Dialog);
     const drawerProps = buildProps({
       ...dialogProps,
@@ -17592,7 +17237,7 @@ var require_index_001 = __commonJS({
       }
     });
     const drawerEmits = dialogEmits;
-    const _sfc_main$f = defineComponent({
+    const _sfc_main$g = defineComponent({
       name: "ElDrawer",
       components: {
         ElOverlay,
@@ -17636,10 +17281,10 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    const _hoisted_1$6 = ["aria-label", "aria-labelledby", "aria-describedby"];
-    const _hoisted_2$6 = ["id"];
-    const _hoisted_3$5 = ["aria-label"];
-    const _hoisted_4$3 = ["id"];
+    const _hoisted_1$7 = ["aria-label", "aria-labelledby", "aria-describedby"];
+    const _hoisted_2$7 = ["id"];
+    const _hoisted_3$6 = ["aria-label"];
+    const _hoisted_4$4 = ["id"];
     function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_close = resolveComponent("close");
       const _component_el_icon = resolveComponent("el-icon");
@@ -17705,7 +17350,7 @@ var require_index_001 = __commonJS({
                             id: _ctx.titleId,
                             role: "heading",
                             class: normalizeClass(_ctx.ns.e("title"))
-                          }, toDisplayString(_ctx.title), 11, _hoisted_2$6)) : createCommentVNode("v-if", true)
+                          }, toDisplayString(_ctx.title), 11, _hoisted_2$7)) : createCommentVNode("v-if", true)
                         ]) : renderSlot(_ctx.$slots, "title", { key: 1 }, () => [
                           createCommentVNode(" DEPRECATED SLOT ")
                         ]),
@@ -17724,7 +17369,7 @@ var require_index_001 = __commonJS({
                             ]),
                             _: 1
                           }, 8, ["class"])
-                        ], 10, _hoisted_3$5)) : createCommentVNode("v-if", true)
+                        ], 10, _hoisted_3$6)) : createCommentVNode("v-if", true)
                       ], 2)) : createCommentVNode("v-if", true),
                       _ctx.rendered ? (openBlock(), createElementBlock("div", {
                         key: 1,
@@ -17732,14 +17377,14 @@ var require_index_001 = __commonJS({
                         class: normalizeClass(_ctx.ns.e("body"))
                       }, [
                         renderSlot(_ctx.$slots, "default")
-                      ], 10, _hoisted_4$3)) : createCommentVNode("v-if", true),
+                      ], 10, _hoisted_4$4)) : createCommentVNode("v-if", true),
                       _ctx.$slots.footer ? (openBlock(), createElementBlock("div", {
                         key: 2,
                         class: normalizeClass(_ctx.ns.e("footer"))
                       }, [
                         renderSlot(_ctx.$slots, "footer")
                       ], 2)) : createCommentVNode("v-if", true)
-                    ], 16, _hoisted_1$6)
+                    ], 16, _hoisted_1$7)
                   ]),
                   _: 3
                 }, 8, ["trapped", "focus-trap-el", "focus-start-el", "onReleaseRequested"])
@@ -17753,23 +17398,23 @@ var require_index_001 = __commonJS({
         }, 8, ["name", "onAfterEnter", "onAfterLeave", "onBeforeLeave"])
       ], 8, ["disabled"]);
     }
-    var Drawer = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$7], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/drawer/src/drawer.vue"]]);
+    var Drawer = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$7], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/drawer/src/drawer.vue"]]);
     const ElDrawer = withInstall(Drawer);
-    const _sfc_main$e = /* @__PURE__ */ defineComponent({
+    const _sfc_main$f = /* @__PURE__ */ defineComponent({
       inheritAttrs: false
     });
     function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
       return renderSlot(_ctx.$slots, "default");
     }
-    var Collection = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$6], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection.vue"]]);
-    const _sfc_main$d = /* @__PURE__ */ defineComponent({
+    var Collection = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$6], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection.vue"]]);
+    const _sfc_main$e = /* @__PURE__ */ defineComponent({
       name: "ElCollectionItem",
       inheritAttrs: false
     });
     function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
       return renderSlot(_ctx.$slots, "default");
     }
-    var CollectionItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render$5], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection-item.vue"]]);
+    var CollectionItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$5], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection-item.vue"]]);
     const COLLECTION_ITEM_SIGN = `data-el-collection-item`;
     const createCollectionWithScope = (name) => {
       const COLLECTION_NAME = `El${name}Collection`;
@@ -18002,7 +17647,7 @@ var require_index_001 = __commonJS({
         hoverItem
       };
     }
-    const _sfc_main$c = defineComponent({
+    const _sfc_main$d = defineComponent({
       name: "ElOption",
       componentName: "ElOption",
       props: {
@@ -18083,8 +17728,8 @@ var require_index_001 = __commonJS({
         [vShow, _ctx.visible]
       ]);
     }
-    var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
-    const _sfc_main$b = defineComponent({
+    var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
+    const _sfc_main$c = defineComponent({
       name: "ElSelectDropdown",
       componentName: "ElSelectDropdown",
       setup() {
@@ -18119,7 +17764,7 @@ var require_index_001 = __commonJS({
         renderSlot(_ctx.$slots, "default")
       ], 6);
     }
-    var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
+    var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
     function useSelectStates(props) {
       const { t } = useLocale();
       return reactive({
@@ -18890,10 +18535,10 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    const COMPONENT_NAME = "ElSelect";
-    const _sfc_main$a = defineComponent({
-      name: COMPONENT_NAME,
-      componentName: COMPONENT_NAME,
+    const COMPONENT_NAME$1 = "ElSelect";
+    const _sfc_main$b = defineComponent({
+      name: COMPONENT_NAME$1,
+      componentName: COMPONENT_NAME$1,
       components: {
         ElInput,
         ElSelectMenu,
@@ -19240,9 +18885,9 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    const _hoisted_1$5 = ["disabled", "autocomplete"];
-    const _hoisted_2$5 = ["disabled"];
-    const _hoisted_3$4 = { style: { "height": "100%", "display": "flex", "justify-content": "center", "align-items": "center" } };
+    const _hoisted_1$6 = ["disabled", "autocomplete"];
+    const _hoisted_2$6 = ["disabled"];
+    const _hoisted_3$5 = { style: { "height": "100%", "display": "flex", "justify-content": "center", "align-items": "center" } };
     function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
       const _component_el_tag = resolveComponent("el-tag");
       const _component_el_tooltip = resolveComponent("el-tooltip");
@@ -19456,7 +19101,7 @@ var require_index_001 = __commonJS({
                   onCompositionupdate: _cache[12] || (_cache[12] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
                   onCompositionend: _cache[13] || (_cache[13] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
                   onInput: _cache[14] || (_cache[14] = (...args) => _ctx.debouncedQueryChange && _ctx.debouncedQueryChange(...args))
-                }, null, 46, _hoisted_1$5)), [
+                }, null, 46, _hoisted_1$6)), [
                   [vModelText, _ctx.query]
                 ]) : createCommentVNode("v-if", true)
               ], 6)) : createCommentVNode("v-if", true),
@@ -19471,7 +19116,7 @@ var require_index_001 = __commonJS({
                 ]),
                 disabled: _ctx.selectDisabled,
                 type: "text"
-              }, null, 10, _hoisted_2$5)) : createCommentVNode("v-if", true),
+              }, null, 10, _hoisted_2$6)) : createCommentVNode("v-if", true),
               createVNode(_component_el_input, {
                 id: _ctx.id,
                 ref: "reference",
@@ -19528,7 +19173,7 @@ var require_index_001 = __commonJS({
                 _ctx.$slots.prefix ? {
                   name: "prefix",
                   fn: withCtx(() => [
-                    createBaseVNode("div", _hoisted_3$4, [
+                    createBaseVNode("div", _hoisted_3$5, [
                       renderSlot(_ctx.$slots, "prefix")
                     ])
                   ])
@@ -19581,8 +19226,8 @@ var require_index_001 = __commonJS({
         [_directive_click_outside, _ctx.handleClose, _ctx.popperPaneRef]
       ]);
     }
-    var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
-    const _sfc_main$9 = defineComponent({
+    var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
+    const _sfc_main$a = defineComponent({
       name: "ElOptionGroup",
       componentName: "ElOptionGroup",
       props: {
@@ -19646,7 +19291,7 @@ var require_index_001 = __commonJS({
         [vShow, _ctx.visible]
       ]);
     }
-    var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
+    var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
     const ElSelect = withInstall(Select, {
       Option,
       OptionGroup
@@ -19714,11 +19359,11 @@ var require_index_001 = __commonJS({
       "after-leave": () => true
     };
     const updateEventKeyRaw = `onUpdate:visible`;
-    const __default__$4 = defineComponent({
+    const __default__$5 = defineComponent({
       name: "ElPopover"
     });
-    const _sfc_main$8 = /* @__PURE__ */ defineComponent({
-      ...__default__$4,
+    const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+      ...__default__$5,
       props: popoverProps,
       emits: popoverEmits,
       setup(__props, { expose, emit: emit2 }) {
@@ -19817,7 +19462,7 @@ var require_index_001 = __commonJS({
         };
       }
     });
-    var Popover = /* @__PURE__ */ _export_sfc$1(_sfc_main$8, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popover/src/popover.vue"]]);
+    var Popover = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popover/src/popover.vue"]]);
     const attachEvents = (el, binding) => {
       const popperComponent = binding.arg || binding.value;
       const popover = popperComponent == null ? void 0 : popperComponent.popperRef;
@@ -19897,16 +19542,16 @@ var require_index_001 = __commonJS({
         default: (percentage) => `${percentage}%`
       }
     });
-    const _hoisted_1$4 = ["aria-valuenow"];
-    const _hoisted_2$4 = { viewBox: "0 0 100 100" };
-    const _hoisted_3$3 = ["d", "stroke", "stroke-width"];
-    const _hoisted_4$2 = ["d", "stroke", "opacity", "stroke-linecap", "stroke-width"];
-    const _hoisted_5$1 = { key: 0 };
-    const __default__$3 = defineComponent({
+    const _hoisted_1$5 = ["aria-valuenow"];
+    const _hoisted_2$5 = { viewBox: "0 0 100 100" };
+    const _hoisted_3$4 = ["d", "stroke", "stroke-width"];
+    const _hoisted_4$3 = ["d", "stroke", "opacity", "stroke-linecap", "stroke-width"];
+    const _hoisted_5$2 = { key: 0 };
+    const __default__$4 = defineComponent({
       name: "ElProgress"
     });
-    const _sfc_main$7 = /* @__PURE__ */ defineComponent({
-      ...__default__$3,
+    const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+      ...__default__$4,
       props: progressProps,
       setup(__props) {
         const props = __props;
@@ -20054,7 +19699,7 @@ var require_index_001 = __commonJS({
               class: normalizeClass(unref(ns).b("circle")),
               style: normalizeStyle({ height: `${_ctx.width}px`, width: `${_ctx.width}px` })
             }, [
-              (openBlock(), createElementBlock("svg", _hoisted_2$4, [
+              (openBlock(), createElementBlock("svg", _hoisted_2$5, [
                 createBaseVNode("path", {
                   class: normalizeClass(unref(ns).be("circle", "track")),
                   d: unref(trackPath),
@@ -20062,7 +19707,7 @@ var require_index_001 = __commonJS({
                   "stroke-width": unref(relativeStrokeWidth),
                   fill: "none",
                   style: normalizeStyle(unref(trailPathStyle))
-                }, null, 14, _hoisted_3$3),
+                }, null, 14, _hoisted_3$4),
                 createBaseVNode("path", {
                   class: normalizeClass(unref(ns).be("circle", "path")),
                   d: unref(trackPath),
@@ -20072,7 +19717,7 @@ var require_index_001 = __commonJS({
                   "stroke-linecap": _ctx.strokeLinecap,
                   "stroke-width": unref(relativeStrokeWidth),
                   style: normalizeStyle(unref(circlePathStyle))
-                }, null, 14, _hoisted_4$2)
+                }, null, 14, _hoisted_4$3)
               ]))
             ], 6)),
             (_ctx.showText || _ctx.$slots.default) && !_ctx.textInside ? (openBlock(), createElementBlock("div", {
@@ -20081,7 +19726,7 @@ var require_index_001 = __commonJS({
               style: normalizeStyle({ fontSize: `${unref(progressTextSize)}px` })
             }, [
               renderSlot(_ctx.$slots, "default", { percentage: _ctx.percentage }, () => [
-                !_ctx.status ? (openBlock(), createElementBlock("span", _hoisted_5$1, toDisplayString(unref(content)), 1)) : (openBlock(), createBlock(unref(ElIcon), { key: 1 }, {
+                !_ctx.status ? (openBlock(), createElementBlock("span", _hoisted_5$2, toDisplayString(unref(content)), 1)) : (openBlock(), createBlock(unref(ElIcon), { key: 1 }, {
                   default: withCtx(() => [
                     (openBlock(), createBlock(resolveDynamicComponent(unref(statusIcon))))
                   ]),
@@ -20089,12 +19734,323 @@ var require_index_001 = __commonJS({
                 }))
               ])
             ], 6)) : createCommentVNode("v-if", true)
-          ], 10, _hoisted_1$4);
+          ], 10, _hoisted_1$5);
         };
       }
     });
-    var Progress = /* @__PURE__ */ _export_sfc$1(_sfc_main$7, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/progress/src/progress.vue"]]);
+    var Progress = /* @__PURE__ */ _export_sfc$1(_sfc_main$8, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/progress/src/progress.vue"]]);
     const ElProgress = withInstall(Progress);
+    const switchProps = buildProps({
+      modelValue: {
+        type: [Boolean, String, Number],
+        default: false
+      },
+      value: {
+        type: [Boolean, String, Number],
+        default: false
+      },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      width: {
+        type: [String, Number],
+        default: ""
+      },
+      inlinePrompt: {
+        type: Boolean,
+        default: false
+      },
+      activeIcon: {
+        type: iconPropType
+      },
+      inactiveIcon: {
+        type: iconPropType
+      },
+      activeText: {
+        type: String,
+        default: ""
+      },
+      inactiveText: {
+        type: String,
+        default: ""
+      },
+      activeColor: {
+        type: String,
+        default: ""
+      },
+      inactiveColor: {
+        type: String,
+        default: ""
+      },
+      borderColor: {
+        type: String,
+        default: ""
+      },
+      activeValue: {
+        type: [Boolean, String, Number],
+        default: true
+      },
+      inactiveValue: {
+        type: [Boolean, String, Number],
+        default: false
+      },
+      name: {
+        type: String,
+        default: ""
+      },
+      validateEvent: {
+        type: Boolean,
+        default: true
+      },
+      id: String,
+      loading: {
+        type: Boolean,
+        default: false
+      },
+      beforeChange: {
+        type: definePropType(Function)
+      },
+      size: {
+        type: String,
+        validator: isValidComponentSize
+      },
+      tabindex: {
+        type: [String, Number]
+      }
+    });
+    const switchEmits = {
+      [UPDATE_MODEL_EVENT]: (val) => isBoolean(val) || isString$1(val) || isNumber(val),
+      [CHANGE_EVENT]: (val) => isBoolean(val) || isString$1(val) || isNumber(val),
+      [INPUT_EVENT]: (val) => isBoolean(val) || isString$1(val) || isNumber(val)
+    };
+    const _hoisted_1$4 = ["onClick"];
+    const _hoisted_2$4 = ["id", "aria-checked", "aria-disabled", "name", "true-value", "false-value", "disabled", "tabindex", "onKeydown"];
+    const _hoisted_3$3 = ["aria-hidden"];
+    const _hoisted_4$2 = ["aria-hidden"];
+    const _hoisted_5$1 = ["aria-hidden"];
+    const COMPONENT_NAME = "ElSwitch";
+    const __default__$3 = defineComponent({
+      name: COMPONENT_NAME
+    });
+    const _sfc_main$7 = /* @__PURE__ */ defineComponent({
+      ...__default__$3,
+      props: switchProps,
+      emits: switchEmits,
+      setup(__props, { expose, emit: emit2 }) {
+        const props = __props;
+        const vm = getCurrentInstance();
+        const { formItem } = useFormItem();
+        const switchSize = useFormSize();
+        const ns = useNamespace("switch");
+        useDeprecated({
+          from: '"value"',
+          replacement: '"model-value" or "v-model"',
+          scope: COMPONENT_NAME,
+          version: "2.3.0",
+          ref: "https://element-plus.org/en-US/component/switch.html#attributes",
+          type: "Attribute"
+        }, computed(() => {
+          var _a2;
+          return !!((_a2 = vm.vnode.props) == null ? void 0 : _a2.value);
+        }));
+        const { inputId } = useFormItemInputId(props, {
+          formItemContext: formItem
+        });
+        const switchDisabled = useFormDisabled(computed(() => props.loading));
+        const isControlled = ref(props.modelValue !== false);
+        const input = ref();
+        const core = ref();
+        const switchKls = computed(() => [
+          ns.b(),
+          ns.m(switchSize.value),
+          ns.is("disabled", switchDisabled.value),
+          ns.is("checked", checked.value)
+        ]);
+        const coreStyle = computed(() => ({
+          width: addUnit(props.width)
+        }));
+        watch(() => props.modelValue, () => {
+          isControlled.value = true;
+        });
+        watch(() => props.value, () => {
+          isControlled.value = false;
+        });
+        const actualValue = computed(() => {
+          return isControlled.value ? props.modelValue : props.value;
+        });
+        const checked = computed(() => actualValue.value === props.activeValue);
+        if (![props.activeValue, props.inactiveValue].includes(actualValue.value)) {
+          emit2(UPDATE_MODEL_EVENT, props.inactiveValue);
+          emit2(CHANGE_EVENT, props.inactiveValue);
+          emit2(INPUT_EVENT, props.inactiveValue);
+        }
+        watch(checked, (val) => {
+          var _a2;
+          input.value.checked = val;
+          if (props.validateEvent) {
+            (_a2 = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a2.call(formItem, "change").catch((err) => debugWarn());
+          }
+        });
+        const handleChange = () => {
+          const val = checked.value ? props.inactiveValue : props.activeValue;
+          emit2(UPDATE_MODEL_EVENT, val);
+          emit2(CHANGE_EVENT, val);
+          emit2(INPUT_EVENT, val);
+          nextTick(() => {
+            input.value.checked = checked.value;
+          });
+        };
+        const switchValue = () => {
+          if (switchDisabled.value)
+            return;
+          const { beforeChange } = props;
+          if (!beforeChange) {
+            handleChange();
+            return;
+          }
+          const shouldChange = beforeChange();
+          const isPromiseOrBool = [
+            isPromise(shouldChange),
+            isBoolean(shouldChange)
+          ].includes(true);
+          if (!isPromiseOrBool) {
+            throwError(COMPONENT_NAME, "beforeChange must return type `Promise<boolean>` or `boolean`");
+          }
+          if (isPromise(shouldChange)) {
+            shouldChange.then((result) => {
+              if (result) {
+                handleChange();
+              }
+            }).catch((e) => {
+            });
+          } else if (shouldChange) {
+            handleChange();
+          }
+        };
+        const styles = computed(() => {
+          return ns.cssVarBlock({
+            ...props.activeColor ? { "on-color": props.activeColor } : null,
+            ...props.inactiveColor ? { "off-color": props.inactiveColor } : null,
+            ...props.borderColor ? { "border-color": props.borderColor } : null
+          });
+        });
+        const focus = () => {
+          var _a2, _b;
+          (_b = (_a2 = input.value) == null ? void 0 : _a2.focus) == null ? void 0 : _b.call(_a2);
+        };
+        onMounted(() => {
+          input.value.checked = checked.value;
+        });
+        expose({
+          focus,
+          checked
+        });
+        return (_ctx, _cache) => {
+          return openBlock(), createElementBlock("div", {
+            class: normalizeClass(unref(switchKls)),
+            style: normalizeStyle(unref(styles)),
+            onClick: withModifiers(switchValue, ["prevent"])
+          }, [
+            createBaseVNode("input", {
+              id: unref(inputId),
+              ref_key: "input",
+              ref: input,
+              class: normalizeClass(unref(ns).e("input")),
+              type: "checkbox",
+              role: "switch",
+              "aria-checked": unref(checked),
+              "aria-disabled": unref(switchDisabled),
+              name: _ctx.name,
+              "true-value": _ctx.activeValue,
+              "false-value": _ctx.inactiveValue,
+              disabled: unref(switchDisabled),
+              tabindex: _ctx.tabindex,
+              onChange: handleChange,
+              onKeydown: withKeys(switchValue, ["enter"])
+            }, null, 42, _hoisted_2$4),
+            !_ctx.inlinePrompt && (_ctx.inactiveIcon || _ctx.inactiveText) ? (openBlock(), createElementBlock("span", {
+              key: 0,
+              class: normalizeClass([
+                unref(ns).e("label"),
+                unref(ns).em("label", "left"),
+                unref(ns).is("active", !unref(checked))
+              ])
+            }, [
+              _ctx.inactiveIcon ? (openBlock(), createBlock(unref(ElIcon), { key: 0 }, {
+                default: withCtx(() => [
+                  (openBlock(), createBlock(resolveDynamicComponent(_ctx.inactiveIcon)))
+                ]),
+                _: 1
+              })) : createCommentVNode("v-if", true),
+              !_ctx.inactiveIcon && _ctx.inactiveText ? (openBlock(), createElementBlock("span", {
+                key: 1,
+                "aria-hidden": unref(checked)
+              }, toDisplayString(_ctx.inactiveText), 9, _hoisted_3$3)) : createCommentVNode("v-if", true)
+            ], 2)) : createCommentVNode("v-if", true),
+            createBaseVNode("span", {
+              ref_key: "core",
+              ref: core,
+              class: normalizeClass(unref(ns).e("core")),
+              style: normalizeStyle(unref(coreStyle))
+            }, [
+              _ctx.inlinePrompt ? (openBlock(), createElementBlock("div", {
+                key: 0,
+                class: normalizeClass(unref(ns).e("inner"))
+              }, [
+                _ctx.activeIcon || _ctx.inactiveIcon ? (openBlock(), createBlock(unref(ElIcon), {
+                  key: 0,
+                  class: normalizeClass(unref(ns).is("icon"))
+                }, {
+                  default: withCtx(() => [
+                    (openBlock(), createBlock(resolveDynamicComponent(unref(checked) ? _ctx.activeIcon : _ctx.inactiveIcon)))
+                  ]),
+                  _: 1
+                }, 8, ["class"])) : _ctx.activeText || _ctx.inactiveText ? (openBlock(), createElementBlock("span", {
+                  key: 1,
+                  class: normalizeClass(unref(ns).is("text")),
+                  "aria-hidden": !unref(checked)
+                }, toDisplayString(unref(checked) ? _ctx.activeText : _ctx.inactiveText), 11, _hoisted_4$2)) : createCommentVNode("v-if", true)
+              ], 2)) : createCommentVNode("v-if", true),
+              createBaseVNode("div", {
+                class: normalizeClass(unref(ns).e("action"))
+              }, [
+                _ctx.loading ? (openBlock(), createBlock(unref(ElIcon), {
+                  key: 0,
+                  class: normalizeClass(unref(ns).is("loading"))
+                }, {
+                  default: withCtx(() => [
+                    createVNode(unref(loading_default))
+                  ]),
+                  _: 1
+                }, 8, ["class"])) : createCommentVNode("v-if", true)
+              ], 2)
+            ], 6),
+            !_ctx.inlinePrompt && (_ctx.activeIcon || _ctx.activeText) ? (openBlock(), createElementBlock("span", {
+              key: 1,
+              class: normalizeClass([
+                unref(ns).e("label"),
+                unref(ns).em("label", "right"),
+                unref(ns).is("active", unref(checked))
+              ])
+            }, [
+              _ctx.activeIcon ? (openBlock(), createBlock(unref(ElIcon), { key: 0 }, {
+                default: withCtx(() => [
+                  (openBlock(), createBlock(resolveDynamicComponent(_ctx.activeIcon)))
+                ]),
+                _: 1
+              })) : createCommentVNode("v-if", true),
+              !_ctx.activeIcon && _ctx.activeText ? (openBlock(), createElementBlock("span", {
+                key: 1,
+                "aria-hidden": !unref(checked)
+              }, toDisplayString(_ctx.activeText), 9, _hoisted_5$1)) : createCommentVNode("v-if", true)
+            ], 2)) : createCommentVNode("v-if", true)
+          ], 14, _hoisted_1$4);
+        };
+      }
+    });
+    var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$7, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
+    const ElSwitch = withInstall(Switch);
     const textProps = buildProps({
       type: {
         type: String,
@@ -21676,8 +21632,7 @@ var require_index_001 = __commonJS({
     const elOverlay = "";
     const elDrawer = "";
     const elText = "";
-    const elRadioGroup = "";
-    const elRadio = "";
+    const elSwitch = "";
     const elInput = "";
     const elTag = "";
     const elOption = "";
@@ -21685,6 +21640,7 @@ var require_index_001 = __commonJS({
     const elScrollbar = "";
     const elPopper = "";
     const elSelect = "";
+    const elTooltip = "";
     const elPopover = "";
     const elAutocomplete = "";
     const elButton = "";
@@ -22770,7 +22726,7 @@ var require_index_001 = __commonJS({
       stringify
     };
     var lib = JSON5;
-    const Ua_vue_vue_type_style_index_0_scoped_ed594b8e_lang = "";
+    const Ua_vue_vue_type_style_index_0_scoped_f30c550e_lang = "";
     const Ua_vue_vue_type_style_index_1_lang = "";
     const _export_sfc = (sfc, props) => {
       const target = sfc.__vccOpts || sfc;
@@ -22782,7 +22738,7 @@ var require_index_001 = __commonJS({
     const elBadge = "";
     const elMessage = "";
     const elNotification = "";
-    const _withScopeId = (n) => (pushScopeId("data-v-ed594b8e"), n = n(), popScopeId(), n);
+    const _withScopeId = (n) => (pushScopeId("data-v-f30c550e"), n = n(), popScopeId(), n);
     const _hoisted_1 = {
       class: "container",
       "element-loading-text": "下载中，莫着急..."
@@ -22810,28 +22766,29 @@ var require_index_001 = __commonJS({
     const _hoisted_12 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("h4", null, "本地包下载配置", -1));
     const _hoisted_13 = { class: "drawer-list" };
     const _hoisted_14 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, [
-      /* @__PURE__ */ createTextVNode("自定义token"),
-      /* @__PURE__ */ createBaseVNode("span", null, "(可不填)")
+      /* @__PURE__ */ createTextVNode("自定义Token"),
+      /* @__PURE__ */ createBaseVNode("span")
     ], -1));
     const _hoisted_15 = { class: "drawer-item-div" };
     const _hoisted_16 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, [
       /* @__PURE__ */ createTextVNode("自定义壁纸"),
-      /* @__PURE__ */ createBaseVNode("span", null, "(可不填)")
+      /* @__PURE__ */ createBaseVNode("span")
     ], -1));
     const _hoisted_17 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, [
       /* @__PURE__ */ createTextVNode("线路更新提醒"),
-      /* @__PURE__ */ createBaseVNode("span", null, "(选择一条常用的线路，若线路更新，会收到提醒通知)")
+      /* @__PURE__ */ createBaseVNode("span")
     ], -1));
-    const _hoisted_18 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, "是否生成多线路", -1));
-    const _hoisted_19 = { style: { "flex": "auto" } };
-    const _hoisted_20 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("img", {
+    const _hoisted_18 = { class: "flex" };
+    const _hoisted_19 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, "生成多线路", -1));
+    const _hoisted_20 = { style: { "flex": "auto" } };
+    const _hoisted_21 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("img", {
       src: "https://www.lige.fit/images/QRCode.jpg",
       class: "qrcode"
     }, null, -1));
-    const _hoisted_21 = { class: "dialog-footer" };
-    const _hoisted_22 = ["href"];
-    const _hoisted_23 = { class: "dialog-footer" };
-    const _hoisted_24 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("img", {
+    const _hoisted_22 = { class: "dialog-footer" };
+    const _hoisted_23 = ["href"];
+    const _hoisted_24 = { class: "dialog-footer" };
+    const _hoisted_25 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("img", {
       src: "https://www.lige.fit/images/QRCode.jpg",
       class: "preload"
     }, null, -1));
@@ -23176,10 +23133,10 @@ var require_index_001 = __commonJS({
           const _component_el_autocomplete = ElAutocomplete;
           const _component_el_input = ElInput;
           const _component_el_popover = ElPopover;
+          const _component_el_tooltip = ElTooltip;
           const _component_el_option = ElOption;
           const _component_el_select = ElSelect;
-          const _component_el_radio = ElRadio;
-          const _component_el_radio_group = ElRadioGroup;
+          const _component_el_switch = ElSwitch;
           const _component_el_text = ElText;
           const _component_el_drawer = ElDrawer;
           const _component_el_dialog = ElDialog;
@@ -23330,18 +23287,22 @@ var require_index_001 = __commonJS({
                       createVNode(_component_el_input, {
                         modelValue: unref(config).token,
                         "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => unref(config).token = $event),
-                        placeholder: "支持token值或链接（默认：http://127.0.0.1:9978/file/tvbox/token.txt）"
+                        placeholder: "支持Token值或链接（如需统一Token，下载前需要设置Token值）"
                       }, null, 8, ["modelValue"]),
-                      createVNode(_component_el_button, {
-                        type: "success",
-                        onClick: tokenRefresh,
-                        disabled: tokening.value
+                      createVNode(_component_el_tooltip, {
+                        effect: "light",
+                        content: "刷新Token值",
+                        placement: "top"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("刷新Token")
+                          createVNode(_component_el_button, {
+                            onClick: tokenRefresh,
+                            disabled: tokening.value,
+                            icon: unref(refresh_default)
+                          }, null, 8, ["disabled", "icon"])
                         ]),
                         _: 1
-                      }, 8, ["disabled"])
+                      })
                     ])
                   ]),
                   createBaseVNode("li", null, [
@@ -23349,7 +23310,7 @@ var require_index_001 = __commonJS({
                     createVNode(_component_el_input, {
                       modelValue: unref(config).wallpaper,
                       "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => unref(config).wallpaper = $event),
-                      placeholder: "支持随机壁纸接口或本地壁纸（如：clan://localhost/xxx/1.png）"
+                      placeholder: "支持随机壁纸接口或本地壁纸（如：clan://localhost/tvbox/1.png）"
                     }, null, 8, ["modelValue"])
                   ]),
                   createBaseVNode("li", null, [
@@ -23358,7 +23319,7 @@ var require_index_001 = __commonJS({
                       modelValue: unref(config).lineTip.url,
                       "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => unref(config).lineTip.url = $event),
                       clearable: "",
-                      placeholder: "请选择",
+                      placeholder: "请选择（若线路更新，会收到提醒通知）",
                       onChange: _cache[12] || (_cache[12] = ($event) => lineChange($event))
                     }, {
                       default: withCtx(() => [
@@ -23373,34 +23334,12 @@ var require_index_001 = __commonJS({
                       _: 1
                     }, 8, ["modelValue"])
                   ]),
-                  createBaseVNode("li", null, [
-                    _hoisted_18,
-                    createVNode(_component_el_radio_group, {
+                  createBaseVNode("li", _hoisted_18, [
+                    _hoisted_19,
+                    createVNode(_component_el_switch, {
                       modelValue: unref(config).isLines,
                       "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => unref(config).isLines = $event)
-                    }, {
-                      default: withCtx(() => [
-                        createVNode(_component_el_radio, {
-                          label: true,
-                          size: "large"
-                        }, {
-                          default: withCtx(() => [
-                            createTextVNode("是")
-                          ]),
-                          _: 1
-                        }),
-                        createVNode(_component_el_radio, {
-                          label: false,
-                          size: "large"
-                        }, {
-                          default: withCtx(() => [
-                            createTextVNode("否")
-                          ]),
-                          _: 1
-                        })
-                      ]),
-                      _: 1
-                    }, 8, ["modelValue"])
+                    }, null, 8, ["modelValue"])
                   ]),
                   createBaseVNode("li", null, [
                     createVNode(_component_el_text, {
@@ -23408,7 +23347,7 @@ var require_index_001 = __commonJS({
                       type: "info"
                     }, {
                       default: withCtx(() => [
-                        createTextVNode("所有配置数据仅保存本地，刷新完Token后需点击“保存配置”按钮")
+                        createTextVNode("所有配置数据仅保存本地，需点击“保存配置”按钮生效")
                       ]),
                       _: 1
                     })
@@ -23416,7 +23355,7 @@ var require_index_001 = __commonJS({
                 ])
               ]),
               footer: withCtx(() => [
-                createBaseVNode("div", _hoisted_19, [
+                createBaseVNode("div", _hoisted_20, [
                   createVNode(_component_el_button, { onClick: clearClick }, {
                     default: withCtx(() => [
                       createTextVNode("清空缓存")
@@ -23443,7 +23382,7 @@ var require_index_001 = __commonJS({
               title: "加入频道"
             }, {
               default: withCtx(() => [
-                _hoisted_20
+                _hoisted_21
               ]),
               _: 1
             }, 8, ["modelValue"]),
@@ -23456,7 +23395,7 @@ var require_index_001 = __commonJS({
               "close-on-click-modal": false
             }, {
               footer: withCtx(() => [
-                createBaseVNode("span", _hoisted_21, [
+                createBaseVNode("span", _hoisted_22, [
                   createVNode(_component_el_button, {
                     onClick: _cache[19] || (_cache[19] = ($event) => pushdialogVisible.value = false)
                   }, {
@@ -23533,7 +23472,7 @@ var require_index_001 = __commonJS({
               "close-on-click-modal": false
             }, {
               footer: withCtx(() => [
-                createBaseVNode("span", _hoisted_23, [
+                createBaseVNode("span", _hoisted_24, [
                   createVNode(_component_el_button, {
                     onClick: _cache[24] || (_cache[24] = ($event) => pushLinedialogVisible.value = false)
                   }, {
@@ -23587,7 +23526,7 @@ var require_index_001 = __commonJS({
                             createBaseVNode("a", {
                               href: tvboxIp.value,
                               target: "_blank"
-                            }, "请点击此处推送", 8, _hoisted_22)
+                            }, "请点击此处推送", 8, _hoisted_23)
                           ]),
                           _: 1
                         })
@@ -23600,14 +23539,14 @@ var require_index_001 = __commonJS({
               ]),
               _: 1
             }, 8, ["modelValue"]),
-            _hoisted_24
+            _hoisted_25
           ])), [
             [_directive_loading, downing.value]
           ]);
         };
       }
     };
-    const Ua = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-ed594b8e"]]);
+    const Ua = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-f30c550e"]]);
     const elProgress = "";
     const elMessageBox = "";
     const _sfc_main$1 = {

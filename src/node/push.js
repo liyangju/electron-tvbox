@@ -49,6 +49,7 @@ class TvBoxUploader {
         formData.append('path', path);
 
         for (let i = 0; i < files.length; i++) {
+            console.log(fs.createReadStream(files[i]))
             formData.append(`files-${i}`, fs.createReadStream(files[i]));
         }
 

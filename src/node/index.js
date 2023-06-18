@@ -15,13 +15,14 @@ const desktopPath = require('os').homedir()+ '/Desktop'; //获取当前用户的
 
 
 const decryptAesBCB = async(encryptedData)=> {
-    const dataArr = encryptedData.split("");
+    const dataArr = encryptedData.trim().split("");
     const prefixCode = Buffer.from("$#", "utf-8").toString("hex");
     const suffixCode = Buffer.from("#$", "utf-8").toString("hex");
     // console.log(prefixCode, suffixCode)
     const pwdMix = dataArr
       .splice(0, encryptedData.indexOf(suffixCode) + 4)
       .join("");
+
     const roundtimeInHax = dataArr.splice(dataArr.length - 26, 26).join("");
     const encryptedText = dataArr.join("");
     const pwdInHax = pwdMix.substring(
