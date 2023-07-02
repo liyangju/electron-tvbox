@@ -162,21 +162,26 @@ const downloadFiles = async(urlsList, folderPath)=> {
                 let drpyContent = fs.readFileSync(drpyPath, 'utf-8');
     
                 const drpyFileNames = [];
+                const drpyBaseName = [];
                 const newDrpyContent = drpyContent.replace(regex.drpyRegex, (match, p1, p2, p3, p4) => {
-                drpyFileNames.push(p3);
-                if (p2 === '') {
-                    return match;
-                } else {
-                    return p1 + p3;
-                }
+                    drpyBaseName.push(p2);
+                    drpyFileNames.push(p3);
+                    if (p2 === '') {
+                        return match;
+                    } else {
+                        return p1 + decodeURIComponent(p3);
+                    }
                 });
     
 
                 console.log("drpyFileNames", drpyFileNames);
                 fs.writeFileSync(drpyPath, newDrpyContent);
-                const downloadPromisesDrpy = drpyFileNames.map(async (name) => {
+                const downloadPromisesDrpy = drpyFileNames.map(async (name,index) => {
                     let url = `${drpyDirname}/${name}`;
-                    const filePath = path.join(folderPath, name);
+                    if(drpyBaseName[index].startsWith('http')){
+                        url = `${drpyBaseName[index]}${name}`
+                    }
+                    const filePath = path.join(folderPath, decodeURIComponent(name));
                     let resDb = await downloadFile(url, filePath)
                     // console.log(resDb)
                     if (resDb.status == 'error') {
@@ -237,7 +242,7 @@ const getHashToWeb = async(url)=>{
 }
 
 const removeEmojiAndText = (text)=> {
-    const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线/g;
+    const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线|(有跑马灯)/g;
     return text.replace(emojiRegex, '');
 }
 const updateFiles = async(url,name,config) =>{
@@ -251,7 +256,7 @@ const updateFiles = async(url,name,config) =>{
         
         const dotPath = `${path.dirname(url)}/`;
 
-        const jarMatches = result.match(regex.jarRegex)[0];
+		const jarMatches = result.match(regex.jarRegex)?.[0] || '';
         const jarUrl =   jarMatches.includes('./') ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
         
         const linkMatches = result.match(regex.linkRegex);
@@ -538,9 +543,16 @@ const getJson = async () => {
         });
 
         // 过滤掉yydsys.top
-        const arrFilter = arr.filter(item=>!item.url.includes('yydsys.top/duo/ali'))
+        // const arrFilter = arr.filter(item=>!item.url.includes('yydsys.top/duo/ali'))
+        
+		// 过滤掉http://yydsys.top/duo/ali和http://cdn.yydsys.top/duo
+		const isInvalidUrl = (url) => {
+			return url.includes('http://yydsys.top/duo/ali') || url.includes('http://cdn.yydsys.top/duo');
+		};
 
-        const uniqueArr = arrFilter.reduce((acc, cur) => {
+		const filteredArr = arr.filter(item => !isInvalidUrl(item.url));
+
+		const uniqueArr = filteredArr.reduce((acc, cur) => {
             const hasDuplicate = acc.some(item => item.url === cur.url);
             if (!hasDuplicate) {
                 acc.push(cur);

@@ -35,7 +35,6 @@ const decryptAesBCB = async (encryptedData) => {
   const pwdMix = dataArr.splice(0, encryptedData.indexOf(suffixCode) + 4).join("");
   const roundtimeInHax = dataArr.splice(dataArr.length - 26, 26).join("");
   const encryptedText = dataArr.join("");
-  console.log(roundtimeInHax.length, roundtimeInHax);
   const pwdInHax = pwdMix.substring(
     prefixCode.length,
     pwdMix.length - suffixCode.length
@@ -147,19 +146,24 @@ const downloadFiles = async (urlsList, folderPath) => {
       if (fs$1.existsSync(drpyPath)) {
         let drpyContent = fs$1.readFileSync(drpyPath, "utf-8");
         const drpyFileNames = [];
+        const drpyBaseName = [];
         const newDrpyContent = drpyContent.replace(regex.drpyRegex, (match, p1, p2, p3, p4) => {
+          drpyBaseName.push(p2);
           drpyFileNames.push(p3);
           if (p2 === "") {
             return match;
           } else {
-            return p1 + p3;
+            return p1 + decodeURIComponent(p3);
           }
         });
         console.log("drpyFileNames", drpyFileNames);
         fs$1.writeFileSync(drpyPath, newDrpyContent);
-        const downloadPromisesDrpy = drpyFileNames.map(async (name) => {
+        const downloadPromisesDrpy = drpyFileNames.map(async (name, index) => {
           let url = `${drpyDirname}/${name}`;
-          const filePath = path$1.join(folderPath, name);
+          if (drpyBaseName[index].startsWith("http")) {
+            url = `${drpyBaseName[index]}${name}`;
+          }
+          const filePath = path$1.join(folderPath, decodeURIComponent(name));
           let resDb = await downloadFile(url, filePath);
           if (resDb.status == "error") {
             const fallbackUrls = [
@@ -209,7 +213,7 @@ const getHashToWeb = async (url) => {
   return hash;
 };
 const removeEmojiAndText = (text) => {
-  const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线/g;
+  const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线|(有跑马灯)/g;
   return text.replace(emojiRegex, "");
 };
 const updateFiles = async (url, name, config) => {
@@ -218,7 +222,7 @@ const updateFiles = async (url, name, config) => {
     result = stripComments(result);
     const checkHashRes = result;
     const dotPath = `${path$1.dirname(url)}/`;
-    const jarMatches = result.match(regex.jarRegex)[0];
+    const jarMatches = result.match(regex.jarRegex)?.[0] || "";
     const jarUrl = jarMatches.includes("./") ? jarMatches.replace(/\.\//, dotPath) : jarMatches;
     const linkMatches = result.match(regex.linkRegex);
     const linkUrlList = linkMatches.map((link) => link.includes("./") ? link.replace(/\.\//, dotPath) : link);
@@ -429,8 +433,11 @@ const getJson = async () => {
     ).then((results) => {
       return results.flat();
     });
-    const arrFilter = arr.filter((item) => !item.url.includes("yydsys.top/duo/ali"));
-    const uniqueArr = arrFilter.reduce((acc, cur) => {
+    const isInvalidUrl = (url) => {
+      return url.includes("http://yydsys.top/duo/ali") || url.includes("http://cdn.yydsys.top/duo");
+    };
+    const filteredArr = arr.filter((item) => !isInvalidUrl(item.url));
+    const uniqueArr = filteredArr.reduce((acc, cur) => {
       const hasDuplicate = acc.some((item) => item.url === cur.url);
       if (!hasDuplicate) {
         acc.push(cur);
