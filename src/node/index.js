@@ -186,7 +186,7 @@ const downloadFiles = async(urlsList, folderPath)=> {
                     // console.log(resDb)
                     if (resDb.status == 'error') {
                         const fallbackUrls = [
-                        'http://v.tvfan.top:88/tvbox/js',
+                        'https://tv.lige.fit/FTY/lib',
                         'https://jihulab.com/duomv/duo/-/raw/main/js'
                         ];
                     
@@ -367,7 +367,7 @@ const updateFiles = async(url,name,config) =>{
                     callback: () => {
                         parseJSON5.sites.splice(-2);
                         parseJSON5.sites = parseJSON5.sites.map(site => {
-                            if (site.key === 'js豆瓣') {
+                            if (site.key === 'js豆瓣' || site.key === 'js豆豆') {
                                 return {
                                     ...site,
                                     name: '🅱豆瓣┃推荐'
