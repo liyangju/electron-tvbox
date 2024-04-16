@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         # os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [windows-latest, macos-latest]
+        os: [macos-latest]
 
     steps:
       - name: Check out Git repository
@@ -46,8 +46,8 @@ jobs:
           path: dist/*TVBOX*.exe
           if-no-files-found: ignore
 
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: TVBOX-linux
-      #     path: dist/*.AppImage
-      #     if-no-files-found: ignore
+      - uses: actions/upload-artifact@v3
+        with:
+          name: TVBOX-linux
+          path: dist/*.AppImage
+          if-no-files-found: ignore
