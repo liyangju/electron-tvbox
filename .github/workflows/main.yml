@@ -45,8 +45,8 @@ jobs:
           path: dist/*TVBOX*.exe
           if-no-files-found: ignore
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: TVBOX-linux
-          path: dist/*.AppImage
-          if-no-files-found: ignore
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: TVBOX-linux
+      #     path: dist/*.AppImage
+      #     if-no-files-found: ignore
