@@ -62,7 +62,7 @@
       <el-button size="large" color="#00B89F" @click="pushDialog()">推送本地包</el-button>
       <el-button size="large" type="warning"
         >前往主页
-        <a href="https://lige.fit" target="_blank" class="back"></a>
+        <a href="https://lige.chat" target="_blank" class="back"></a>
       </el-button>
     </div>
 
@@ -139,7 +139,7 @@
     </el-drawer>
 
     <el-dialog v-model="qrDialogVisible" width="300px" title="加入频道">
-      <img src="https://www.lige.fit/images/QRCode.jpg" class="qrcode" />
+      <img src="https://www.lige.chat/images/QRCode.jpg" class="qrcode" />
     </el-dialog>
 
     <el-dialog
@@ -198,7 +198,7 @@
       </template>
     </el-dialog>
 
-    <img src="https://www.lige.fit/images/QRCode.jpg" class="preload" />
+    <img src="https://www.lige.chat/images/QRCode.jpg" class="preload" />
   </div>
 </template>
 

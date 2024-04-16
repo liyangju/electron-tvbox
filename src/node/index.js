@@ -186,7 +186,7 @@ const downloadFiles = async(urlsList, folderPath)=> {
                     // console.log(resDb)
                     if (resDb.status == 'error') {
                         const fallbackUrls = [
-                        'https://tv.lige.fit/FTY/lib',
+                        'https://tv.lige.chat/FTY/lib',
                         'https://jihulab.com/duomv/duo/-/raw/main/js'
                         ];
                     
@@ -518,7 +518,7 @@ const downloadJar = async(url)=>{
 }
 
 
-const getJson = async () => {
+const getJsonDuoDuo = async () => {
     try {
         const { data } = await axios.get('https://jihulab.com/duomv/apps/-/raw/main/fast.json');
       
@@ -565,6 +565,14 @@ const getJson = async () => {
     }
 };
 
+const getJson = async () => {
+  try {
+    const { data } = await axios.get("https://gitlab.com/ligeya/m/-/raw/main/M.json");
+    return data.urls;
+  } catch (error) {
+    throw error.message;
+  }
+};
 
 const getToken = async (token) => {
     try {

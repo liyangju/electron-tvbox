@@ -167,7 +167,7 @@ const downloadFiles = async (urlsList, folderPath) => {
           let resDb = await downloadFile(url, filePath);
           if (resDb.status == "error") {
             const fallbackUrls = [
-              "https://tv.lige.fit/FTY/lib",
+              "https://tv.lige.chat/FTY/lib",
               "https://jihulab.com/duomv/duo/-/raw/main/js"
             ];
             for (const fallbackUrl of fallbackUrls) {
@@ -417,34 +417,8 @@ const downloadJar = async (url) => {
 };
 const getJson = async () => {
   try {
-    const { data } = await axios$1.get("https://jihulab.com/duomv/apps/-/raw/main/fast.json");
-    const storeHouse = data.storeHouse;
-    const arr = await Promise.all(
-      storeHouse.map(async (item) => {
-        const json = await axios$1.get(item.sourceUrl);
-        try {
-          const parseJSON5 = JSON5.parse(json.data)?.urls.slice(1);
-          return parseJSON5;
-        } catch (err) {
-          const parseJSON = json.data?.urls.slice(1) || [];
-          return parseJSON;
-        }
-      })
-    ).then((results) => {
-      return results.flat();
-    });
-    const isInvalidUrl = (url) => {
-      return url.includes("http://yydsys.top/duo/ali") || url.includes("http://cdn.yydsys.top/duo");
-    };
-    const filteredArr = arr.filter((item) => !isInvalidUrl(item.url));
-    const uniqueArr = filteredArr.reduce((acc, cur) => {
-      const hasDuplicate = acc.some((item) => item.url === cur.url);
-      if (!hasDuplicate) {
-        acc.push(cur);
-      }
-      return acc;
-    }, []);
-    return uniqueArr;
+    const { data } = await axios$1.get("https://gitlab.com/ligeya/m/-/raw/main/M.json");
+    return data.urls;
   } catch (error) {
     throw error.message;
   }
