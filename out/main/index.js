@@ -167,8 +167,7 @@ const downloadFiles = async (urlsList, folderPath) => {
           let resDb = await downloadFile(url, filePath);
           if (resDb.status == "error") {
             const fallbackUrls = [
-              "https://tv.lige.chat/FTY/lib",
-              "https://jihulab.com/duomv/duo/-/raw/main/js"
+              "https://tv.lige.chat/FTY/lib"
             ];
             for (const fallbackUrl of fallbackUrls) {
               url = `${fallbackUrl}/${name}`;
@@ -213,7 +212,7 @@ const getHashToWeb = async (url) => {
   return hash;
 };
 const removeEmojiAndText = (text) => {
-  const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线|(有跑马灯)/g;
+  const emojiRegex = /[^\w\u4e00-\u9fa5-]|应用|家庭版|线路|专线|(有跑马灯)|多.*?┃/g;
   return text.replace(emojiRegex, "");
 };
 const updateFiles = async (url, name, config) => {

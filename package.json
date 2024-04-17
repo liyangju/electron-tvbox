@@ -1,6 +1,6 @@
 {
   "name": "tvbox-config",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "tvbox-config from lige",
   "main": "./out/main/index.js",
   "author": "lige.chat",
@@ -19,10 +19,10 @@
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
-    "axios": "^1.4.0",
+    "axios": "^1.6.8",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
-    "element-plus": "^2.3.4",
+    "element-plus": "^2.7.0",
     "json5": "^2.2.3",
     "pinyin-pro": "^3.14.0",
     "strip-comments": "^2.0.1"
@@ -42,8 +42,7 @@
     "unplugin-auto-import": "^0.15.3",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.2.1",
-    "vue": "^3.2.47",
-    "dmg-license": "^1.0.11"
+    "vue": "^3.2.47"
   },
   "__npminstall_done": false
 }
