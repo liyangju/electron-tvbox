@@ -279,10 +279,10 @@
   "resolved" "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz"
   "version" "0.17.19"
 
-"@esbuild/win32-x64@0.20.2":
-  "integrity" "sha512-N49X4lJX27+l9jbLKSqZ6bKNjzQvHaT8IIFUy+YIqmXQdjYCToGWwOItDrfby14c78aDd5NHQl29xingXfCdLQ=="
-  "resolved" "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.20.2.tgz"
-  "version" "0.20.2"
+"@esbuild/win32-x64@0.18.20":
+  "integrity" "sha512-kTdfRcSiDfQca/y9QIkng02avJ+NCaQvrMejlsB3RRv5sE9rRoeBPISaZpKxHELzRxZyLvNts1P27W3wV+8geQ=="
+  "resolved" "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.18.20.tgz"
+  "version" "0.18.20"
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.3.0":
   "integrity" "sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA=="
@@ -436,11 +436,6 @@
     "estree-walker" "^2.0.2"
     "picomatch" "^2.3.1"
 
-"@rollup/rollup-win32-x64-msvc@4.14.3":
-  "integrity" "sha512-/BypzV0H1y1HzgYpxqRaXGBRqfodgoBBCcsrujT6QRcakDQdfU+Lq9PENPh5jB4I44YWq+0C2eHsHya+nZY1sA=="
-  "resolved" "https://registry.npmmirror.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.14.3.tgz"
-  "version" "4.14.3"
-
 "@rushstack/eslint-patch@^1.2.0":
   "integrity" "sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg=="
   "resolved" "https://registry.npmmirror.com/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz"
@@ -480,7 +475,7 @@
   dependencies:
     "@types/ms" "*"
 
-"@types/estree@^1.0.0", "@types/estree@1.0.5":
+"@types/estree@^1.0.0":
   "integrity" "sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw=="
   "resolved" "https://registry.npmmirror.com/@types/estree/-/estree-1.0.5.tgz"
   "version" "1.0.5"
@@ -534,7 +529,7 @@
   "resolved" "https://registry.npmmirror.com/@types/ms/-/ms-0.7.31.tgz"
   "version" "0.7.31"
 
-"@types/node@*", "@types/node@^18.0.0 || >=20.0.0":
+"@types/node@*", "@types/node@>= 14":
   "integrity" "sha512-At4pvmIOki8yuwLtd7BNHl3CiWNbtclUbNtScGx4OHfBd4/oWoJC8KRCIxXwkdndzhxOsPXihrsOoydxBjlE9Q=="
   "resolved" "https://registry.npmmirror.com/@types/node/-/node-20.1.4.tgz"
   "version" "20.1.4"
@@ -1505,34 +1500,33 @@
     "@esbuild/win32-ia32" "0.17.19"
     "@esbuild/win32-x64" "0.17.19"
 
-"esbuild@^0.20.1":
-  "integrity" "sha512-WdOOppmUNU+IbZ0PaDiTst80zjnrOkyJNHoKupIcVyU8Lvla3Ugx94VzkQ32Ijqd7UhHJy75gNWDMUekcrSJ6g=="
-  "resolved" "https://registry.npmmirror.com/esbuild/-/esbuild-0.20.2.tgz"
-  "version" "0.20.2"
+"esbuild@^0.18.10":
+  "integrity" "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA=="
+  "resolved" "https://registry.npmmirror.com/esbuild/-/esbuild-0.18.20.tgz"
+  "version" "0.18.20"
   optionalDependencies:
-    "@esbuild/aix-ppc64" "0.20.2"
-    "@esbuild/android-arm" "0.20.2"
-    "@esbuild/android-arm64" "0.20.2"
-    "@esbuild/android-x64" "0.20.2"
-    "@esbuild/darwin-arm64" "0.20.2"
-    "@esbuild/darwin-x64" "0.20.2"
-    "@esbuild/freebsd-arm64" "0.20.2"
-    "@esbuild/freebsd-x64" "0.20.2"
-    "@esbuild/linux-arm" "0.20.2"
-    "@esbuild/linux-arm64" "0.20.2"
-    "@esbuild/linux-ia32" "0.20.2"
-    "@esbuild/linux-loong64" "0.20.2"
-    "@esbuild/linux-mips64el" "0.20.2"
-    "@esbuild/linux-ppc64" "0.20.2"
-    "@esbuild/linux-riscv64" "0.20.2"
-    "@esbuild/linux-s390x" "0.20.2"
-    "@esbuild/linux-x64" "0.20.2"
-    "@esbuild/netbsd-x64" "0.20.2"
-    "@esbuild/openbsd-x64" "0.20.2"
-    "@esbuild/sunos-x64" "0.20.2"
-    "@esbuild/win32-arm64" "0.20.2"
-    "@esbuild/win32-ia32" "0.20.2"
-    "@esbuild/win32-x64" "0.20.2"
+    "@esbuild/android-arm" "0.18.20"
+    "@esbuild/android-arm64" "0.18.20"
+    "@esbuild/android-x64" "0.18.20"
+    "@esbuild/darwin-arm64" "0.18.20"
+    "@esbuild/darwin-x64" "0.18.20"
+    "@esbuild/freebsd-arm64" "0.18.20"
+    "@esbuild/freebsd-x64" "0.18.20"
+    "@esbuild/linux-arm" "0.18.20"
+    "@esbuild/linux-arm64" "0.18.20"
+    "@esbuild/linux-ia32" "0.18.20"
+    "@esbuild/linux-loong64" "0.18.20"
+    "@esbuild/linux-mips64el" "0.18.20"
+    "@esbuild/linux-ppc64" "0.18.20"
+    "@esbuild/linux-riscv64" "0.18.20"
+    "@esbuild/linux-s390x" "0.18.20"
+    "@esbuild/linux-x64" "0.18.20"
+    "@esbuild/netbsd-x64" "0.18.20"
+    "@esbuild/openbsd-x64" "0.18.20"
+    "@esbuild/sunos-x64" "0.18.20"
+    "@esbuild/win32-arm64" "0.18.20"
+    "@esbuild/win32-ia32" "0.18.20"
+    "@esbuild/win32-x64" "0.18.20"
 
 "escalade@^3.1.1":
   "integrity" "sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw=="
@@ -2772,7 +2766,7 @@
     "cssesc" "^3.0.0"
     "util-deprecate" "^1.0.2"
 
-"postcss@^8.4.38":
+"postcss@^8.4.27", "postcss@^8.4.38":
   "integrity" "sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A=="
   "resolved" "https://registry.npmmirror.com/postcss/-/postcss-8.4.38.tgz"
   "version" "8.4.38"
@@ -2932,36 +2926,11 @@
     "semver-compare" "^1.0.0"
     "sprintf-js" "^1.1.2"
 
-"rollup@^1.20.0||^2.0.0||^3.0.0":
-  "integrity" "sha512-KXPaEuR8FfUoK2uHwNjxTmJ18ApyvD6zJpYv9FOJSqLStmt6xOY84l1IjK2dSolQmoXknrhEFRaPRgOPdqCT5w=="
-  "resolved" "https://registry.npmmirror.com/rollup/-/rollup-3.21.7.tgz"
-  "version" "3.21.7"
+"rollup@^1.20.0||^2.0.0||^3.0.0", "rollup@^3.27.1":
+  "integrity" "sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw=="
+  "resolved" "https://registry.npmmirror.com/rollup/-/rollup-3.29.4.tgz"
+  "version" "3.29.4"
   optionalDependencies:
-    "fsevents" "~2.3.2"
-
-"rollup@^4.13.0":
-  "integrity" "sha512-ag5tTQKYsj1bhrFC9+OEWqb5O6VYgtQDO9hPDBMmIbePwhfSr+ExlcU741t8Dhw5DkPCQf6noz0jb36D6W9/hw=="
-  "resolved" "https://registry.npmmirror.com/rollup/-/rollup-4.14.3.tgz"
-  "version" "4.14.3"
-  dependencies:
-    "@types/estree" "1.0.5"
-  optionalDependencies:
-    "@rollup/rollup-android-arm-eabi" "4.14.3"
-    "@rollup/rollup-android-arm64" "4.14.3"
-    "@rollup/rollup-darwin-arm64" "4.14.3"
-    "@rollup/rollup-darwin-x64" "4.14.3"
-    "@rollup/rollup-linux-arm-gnueabihf" "4.14.3"
-    "@rollup/rollup-linux-arm-musleabihf" "4.14.3"
-    "@rollup/rollup-linux-arm64-gnu" "4.14.3"
-    "@rollup/rollup-linux-arm64-musl" "4.14.3"
-    "@rollup/rollup-linux-powerpc64le-gnu" "4.14.3"
-    "@rollup/rollup-linux-riscv64-gnu" "4.14.3"
-    "@rollup/rollup-linux-s390x-gnu" "4.14.3"
-    "@rollup/rollup-linux-x64-gnu" "4.14.3"
-    "@rollup/rollup-linux-x64-musl" "4.14.3"
-    "@rollup/rollup-win32-arm64-msvc" "4.14.3"
-    "@rollup/rollup-win32-ia32-msvc" "4.14.3"
-    "@rollup/rollup-win32-x64-msvc" "4.14.3"
     "fsevents" "~2.3.2"
 
 "run-parallel@^1.1.9":
@@ -3348,16 +3317,16 @@
   "resolved" "https://registry.npmmirror.com/util-deprecate/-/util-deprecate-1.0.2.tgz"
   "version" "1.0.2"
 
-"vite@^3.0.0 || ^4.0.0", "vite@^4.0.0", "vite@^5.2.9":
-  "integrity" "sha512-uOQWfuZBlc6Y3W/DTuQ1Sr+oIXWvqljLvS881SVmAj00d5RdgShLcuXWxseWPd4HXwiYBFW/vXHfKFeqj9uQnw=="
-  "resolved" "https://registry.npmmirror.com/vite/-/vite-5.2.9.tgz"
-  "version" "5.2.9"
+"vite@^3.0.0 || ^4.0.0", "vite@^4.0.0", "vite@^4.5.3":
+  "integrity" "sha512-kQL23kMeX92v3ph7IauVkXkikdDRsYMGTVl5KY2E9OY4ONLvkHf04MDTbnfo6NKxZiDLWzVpP5oTa8hQD8U3dg=="
+  "resolved" "https://registry.npmmirror.com/vite/-/vite-4.5.3.tgz"
+  "version" "4.5.3"
   dependencies:
-    "esbuild" "^0.20.1"
-    "postcss" "^8.4.38"
-    "rollup" "^4.13.0"
+    "esbuild" "^0.18.10"
+    "postcss" "^8.4.27"
+    "rollup" "^3.27.1"
   optionalDependencies:
-    "fsevents" "~2.3.3"
+    "fsevents" "~2.3.2"
 
 "vue-demi@*":
   "integrity" "sha512-rt+yuCtXvscYot9SQQj3WKZJVSriPNqVkpVBNEHPzSgBv7QIYzsS410VqVgvx8f9AAPgjg+XPKvmV3vOqqkJQQ=="
