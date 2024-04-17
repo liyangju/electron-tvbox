@@ -42,7 +42,8 @@
     "unplugin-auto-import": "^0.15.3",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.5.3",
-    "vue": "^3.4.23"
+    "vue": "^3.4.23",
+    "dmg-license": "^1.0.11"
   },
   "__npminstall_done": false
 }
