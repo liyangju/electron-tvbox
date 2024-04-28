@@ -231,7 +231,8 @@ const updateFiles = async (url, name, config) => {
     let jsonName = name ? pinyinPro.pinyin(removeEmojiAndText(name), { toneType: "none", type: "array" }).join("") : path$1.parse(url).name;
     let jarName = path$1.basename(jarUrl);
     const urlToJSONName = {
-      "饭太硬": { name: "fty", jarName: "fty.jar" }
+      "饭太硬": { name: "fty", jarName: "fty.jar" },
+      "AL.json": { name: "AL", jarName: "AL.jar" }
     };
     for (const [key, value] of Object.entries(urlToJSONName)) {
       if (url.includes(key)) {
@@ -292,7 +293,7 @@ const updateFiles = async (url, name, config) => {
           callback: () => {
             parseJSON5.sites.splice(-2);
             parseJSON5.sites = parseJSON5.sites.map((site) => {
-              if (site.key === "js豆瓣" || site.key === "js豆豆") {
+              if (site.key.includes("豆豆") || site.key.includes("豆瓣")) {
                 return {
                   ...site,
                   name: "🅱豆瓣┃推荐"
