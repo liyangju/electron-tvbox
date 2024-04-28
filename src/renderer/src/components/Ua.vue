@@ -139,7 +139,7 @@
     </el-drawer>
 
     <el-dialog v-model="qrDialogVisible" width="300px" title="加入频道">
-      <img src="https://www.lige.chat/images/QRCode.jpg" class="qrcode" />
+      <img src="https://lige.chat/images/QRCode.jpg" class="qrcode" />
     </el-dialog>
 
     <el-dialog

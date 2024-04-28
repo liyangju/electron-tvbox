@@ -167,7 +167,7 @@ const downloadFiles = async (urlsList, folderPath) => {
           let resDb = await downloadFile(url, filePath);
           if (resDb.status == "error") {
             const fallbackUrls = [
-              "https://tv.lige.chat/FTY/lib"
+              "https://gitlab.com/fantaiying/ext/-/raw/main"
             ];
             for (const fallbackUrl of fallbackUrls) {
               url = `${fallbackUrl}/${name}`;
@@ -282,7 +282,8 @@ const updateFiles = async (url, name, config) => {
         parseJSON5.sites = parseJSON5.sites.map((site) => {
           return apiSet.has(site.api) ? {
             ...site,
-            ext: tokExt
+            // ext: tokExt,
+            ext: typeof site.ext === "object" ? { ...site.ext, aliToken: tokExt } : tokExt
           } : site;
         });
       }
