@@ -448,6 +448,7 @@ const os = require("os");
 const net = require("net");
 const getLocalIpAddress = () => {
   const interfaces = os.networkInterfaces();
+  console.log("os.networkInterfaces", os.networkInterfaces);
   for (const iface of Object.values(interfaces)) {
     for (const alias of iface) {
       if (alias.family === "IPv4" && !alias.internal) {
@@ -478,6 +479,7 @@ const scanPort = async (ip, port) => {
 const scanLocalNetwork = (port) => {
   const localIpAddress = getLocalIpAddress();
   const promises = [];
+  console.log("localIpAddress", localIpAddress);
   for (let i = 1; i <= 255; i++) {
     const ip = `${localIpAddress.slice(0, localIpAddress.lastIndexOf("."))}.${i}`;
     promises.push(scanPort(ip, port));
